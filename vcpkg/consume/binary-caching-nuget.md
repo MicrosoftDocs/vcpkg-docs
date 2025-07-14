@@ -270,7 +270,7 @@ export VCPKG_BINARY_SOURCES="clear;nuget,<feed url>,readwrite"
 If you're using a `nuget.config` file, instead do:
 
 ```bash
-export VCPKG_BINARY_SOURCES="clear;nugetconfig,<path to nuget.config>"
+export VCPKG_BINARY_SOURCES="clear;nugetconfig,<path to nuget.config>,readwrite"
 ```
 
 ::: zone-end
