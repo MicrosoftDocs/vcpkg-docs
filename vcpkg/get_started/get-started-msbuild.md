@@ -179,8 +179,7 @@ dependencies, configure the project, build, and run a simple application.
 
 1. Build the project.
 
-    Press `Ctrl+Shift+B` to build the project in Visual Studio and acquire the
-    vcpkg dependencies. 
+    Build the project using the `Build > Build Solution` option from the top menu.
 
     If MSBuild detects a `vcpkg.json` file and manifests are enabled in your
     project, MSBuild installs the manifest's dependencies as a pre-build step.

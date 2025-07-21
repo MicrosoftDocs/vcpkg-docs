@@ -6,6 +6,7 @@ ms.author: viromer
 ms.date: 01/10/2024
 ms.topic: tutorial
 #CustomerIntent: As a beginner vcpkg user, I want to learn how to install my project dependencies using vcpkg's command-line interface.
+no-loc: [ triplet, port, baseline, overlay, classic, manifest, toolchain ]
 ---
 # Tutorial: Install a dependency from the command line
 

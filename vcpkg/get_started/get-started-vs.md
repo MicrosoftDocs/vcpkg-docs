@@ -161,7 +161,7 @@ This tutorial shows you how to create a C++ "Hello World" program that uses the 
 
 1. Build the project.
 
-   Press `Ctrl+Shift+B` to build the project in Visual Studio.
+    Build the project using the `Build > Build All` option from the top menu.
 
 2. Run the application.
 
