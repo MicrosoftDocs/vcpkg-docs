@@ -31,7 +31,7 @@ In this tutorial, you will learn to:
 
 * A terminal
 * vcpkg
-* [Git](<https://git-scm.com/downloads>)
+* [Git](https://git-scm.com/downloads)
 * A C++ compiler
 * Completion of the [packaging
   tutorial](../get_started/get-started-packaging.md)
