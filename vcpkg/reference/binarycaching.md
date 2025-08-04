@@ -108,11 +108,11 @@ Storage container. The AzCopy tool supports [non-SAS-based authentication method
 like Microsoft Entra ID. To use SAS token authentication with AzCopy use the [`x-azcopy-sas`](#azcopy-sas) provider.
 
 We recommend setting the `AZCOPY_AUTO_LOGIN_TYPE` environment variable for use in non-interactive scenarios, for example,
-Continuos Integration. Otherwise, you need to preload your credentials for AzCopy before running any vcpkg commands using
+Continuous Integration. Otherwise, you need to preload your credentials for AzCopy before running any vcpkg commands using
 the [`azcopy login`](<https://github.com/Azure/azure-storage-azcopy/wiki/azcopy_login>) command.
 
 The `<baseuri>` parameter must include the container path, default Azure Storage URLs usually follow the form:
-`https://<acount name>.blob.core.windows.net/<container name>`.
+`https://<account name>.blob.core.windows.net/<container name>`.
 ### <a name="azcopy-sas"></a> Azure Blob Storage with AzCopy using a SAS token
 
 [!INCLUDE [experimental](../../includes/experimental.md)]
@@ -123,14 +123,14 @@ The `<baseuri>` parameter must include the container path, default Azure Storage
 > variables that affect the behavior of AzCopy.
 
 ```
-x-azcopy,<baseuri>,<sas>[,<rw>]
+x-azcopy-sas,<baseuri>,<sas>[,<rw>]
 ```
 
 Adds a provider that uses the [AzCopy tool](/azure/storage/common/storage-use-azcopy-v10) to interact with an Azure Blob
 Storage container. This provider uses a SAS token authentication that is appended to every AzCopy request.
 
 The `<baseuri>` parameter must include the container path, default Azure Storage URLs usually follow the form:
-`https://<acount name>.blob.core.windows.net/<container name>`. The `<sas>` parameter must be a valid SAS token, read the
+`https://<account name>.blob.core.windows.net/<container name>`. The `<sas>` parameter must be a valid SAS token, read the
 [`azblob` quickstart guide](#azblob-quickstart) to learn how to generate a valid SAS token.
 
 ### <a name="cos"></a> Tencent Cloud Object Storage provider
