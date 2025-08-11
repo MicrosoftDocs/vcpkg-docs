@@ -96,6 +96,6 @@ For comprehensive configuration options see the [Dependabot options reference][d
 [dependabot-version-updates]: https://docs.github.com/code-security/dependabot/dependabot-version-updates
 [vcpkg]: https://vcpkg.io
 [vcpkg-manifest]: manifest-mode.md
-[vcpkg-overrides]: https://learn.microsoft.com/vcpkg/users/versioning#overrides
+[vcpkg-overrides]: ../users/versioning.md#overrides
 [vcpkg-repo]: https://github.com/Microsoft/vcpkg
 [vcpkg-versioning]: ../users/versioning.concepts.md
