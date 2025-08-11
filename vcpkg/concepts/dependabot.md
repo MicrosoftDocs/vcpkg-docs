@@ -10,7 +10,7 @@ ms.topic: concept-article
 
 [Dependabot](https://docs.github.com/en/code-security/dependabot) is GitHub's automated dependency management service
 that helps keep your project dependencies up-to-date by automatically creating pull requests when new versions are
-available. Starting in 2025, Dependabot now supports [vcpkg](https://vcpkg.io/).
+available. Starting in 2025, Dependabot added support for [vcpkg](https://vcpkg.io/).
 
 ## How Dependabot works with vcpkg
 
@@ -65,12 +65,13 @@ For comprehensive configuration options see the [Dependabot options reference][d
 
 ### vcpkg-specific considerations
 
-- **Test thoroughly**: Baseline updates can introduce breaking changes in dependencies.
+- **Test thoroughly**: Baseline updates can introduce breaking changes from dependencies.
   Always test your build after applying updates.
 - **Monitor vcpkg announcements**: Watch the [vcpkg repository][vcpkg-repo] for announcements
   about breaking changes or important updates.
-- **Consider version pinning**: If you need stability, consider pinning specific dependency
-  versions in your `vcpkg.json` rather than relying solely on baseline updates.
+- **Consider version pinning**: If you need some ports to stay on the same version as you move the rest forward with the
+  baseline, consider [overriding](https://learn.microsoft.com/en-us/vcpkg/users/versioning#overrides) their versions in
+  your `vcpkg.json`.
 
 ### vcpkg-specific issues
 
