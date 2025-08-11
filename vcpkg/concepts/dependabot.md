@@ -70,7 +70,7 @@ For comprehensive configuration options see the [Dependabot options reference][d
 - **Monitor vcpkg announcements**: Watch the [vcpkg repository][vcpkg-repo] for announcements
   about breaking changes or important updates.
 - **Consider version pinning**: If you need some ports to stay on the same version as you move the rest forward with the
-  baseline, consider [overriding](https://learn.microsoft.com/en-us/vcpkg/users/versioning#overrides) their versions in
+  baseline, consider [overriding](https://learn.microsoft.comvcpkg/users/versioning#overrides) their versions in
   your `vcpkg.json`.
 
 ### vcpkg-specific issues
