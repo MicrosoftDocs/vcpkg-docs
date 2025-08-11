@@ -8,15 +8,15 @@ ms.topic: concept-article
 ---
 # Dependabot support for vcpkg
 
-[Dependabot](https://docs.github.com/en/code-security/dependabot) is GitHub's automated dependency management service
+[Dependabot][dependabot] is GitHub's automated dependency management service
 that helps keep your project dependencies up-to-date by automatically creating pull requests when new versions are
-available. Starting in 2025, Dependabot added support for [vcpkg](https://vcpkg.io/).
+available. Starting in 2025, Dependabot added support for [vcpkg][vcpkg].
 
 ## How Dependabot works with vcpkg
 
-When you enable Dependabot for your vcpkg projects, it monitors your `vcpkg.json` manifest files and automatically
+When you enable Dependabot for your vcpkg projects, it monitors your [`vcpkg.json` manifest files][vcpkg-manifest] and automatically
 creates pull requests to update the `builtin-baseline` commit hash. This ensures your C/C++ dependencies stay current
-with the latest versions available in the vcpkg port repository.
+with the latest versions available in the [vcpkg port repository][vcpkg-repo].
 
 ## Setting up Dependabot for vcpkg
 
@@ -50,8 +50,6 @@ updates:
       - "vcpkg"
     commit-message:
       prefix: "deps"
-      include: "scope"
-    open-pull-requests-limit: 5
 ```
 
 ## Configuration options
@@ -70,7 +68,7 @@ For comprehensive configuration options see the [Dependabot options reference][d
 - **Monitor vcpkg announcements**: Watch the [vcpkg repository][vcpkg-repo] for announcements
   about breaking changes or important updates.
 - **Consider version pinning**: If you need some ports to stay on the same version as you move the rest forward with the
-  baseline, consider [overriding](https://learn.microsoft.comvcpkg/users/versioning#overrides) their versions in
+  baseline, consider [overriding][vcpkg-overrides] their versions in
   your `vcpkg.json`.
 
 ### vcpkg-specific issues
@@ -82,7 +80,7 @@ For comprehensive configuration options see the [Dependabot options reference][d
 
 **Build failures after baseline updates:**
 
-- Baseline updates may introduce breaking changes in dependencies
+- Baseline updates may introduce breaking changes from dependencies
 - Review the vcpkg port changes included in the baseline update
 - Consider pinning specific dependency versions in your `vcpkg.json` if needed
 
@@ -90,9 +88,14 @@ For comprehensive configuration options see the [Dependabot options reference][d
 
 - [Dependabot version updates documentation][dependabot-version-updates]
 - [Dependabot configuration options reference][dependabot-options]
-- [vcpkg manifest mode documentation](manifest-mode.md)
-- [vcpkg versioning concepts](../users/versioning.concepts.md)
+- [vcpkg manifest mode documentation][vcpkg-manifest]
+- [vcpkg versioning concepts][vcpkg-versioning]
 
-[dependabot-version-updates]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
-[dependabot-options]: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+[dependabot]: https://docs.github.com/code-security/dependabot
+[dependabot-options]: https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+[dependabot-version-updates]: https://docs.github.com/code-security/dependabot/dependabot-version-updates
+[vcpkg]: https://vcpkg.io
+[vcpkg-manifest]: manifest-mode.md
+[vcpkg-overrides]: https://learn.microsoft.com/vcpkg/users/versioning#overrides
 [vcpkg-repo]: https://github.com/Microsoft/vcpkg
+[vcpkg-versioning]: ../users/versioning.concepts.md
