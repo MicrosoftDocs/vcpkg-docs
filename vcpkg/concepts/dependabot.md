@@ -33,7 +33,7 @@ updates:
       interval: "weekly"
 ```
 
-1. Customize the configuration based on your project needs:
+2. Customize the configuration based on your project needs:
 
 ```yaml
 version: 2
