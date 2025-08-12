@@ -56,8 +56,8 @@ updates:
 
 Dependabot for vcpkg supports all standard Dependabot configuration options. The key vcpkg-specific requirements are:
 
-- `package-ecosystem` must be set to `"vcpkg"`
-- `directory` should point to the location of your `vcpkg.json` file
+- `package-ecosystem` must be set to `"vcpkg"`.
+- `directory` should point to the location of your `vcpkg.json` file.
 
 For comprehensive configuration options see the [Dependabot options reference][dependabot-options].
 
@@ -75,14 +75,14 @@ For comprehensive configuration options see the [Dependabot options reference][d
 
 **Dependabot not creating pull requests:**
 
-- Ensure your repository has a valid `vcpkg.json` with a `builtin-baseline` field
-- Verify the `directory` path in your configuration points to the correct location
+- Ensure your repository has a valid `vcpkg.json` with a `builtin-baseline` field.
+- Verify the `directory` path in your configuration points to the correct location.
 
 **Build failures after baseline updates:**
 
-- Baseline updates may introduce breaking changes from dependencies
-- Review the vcpkg port changes included in the baseline update
-- Consider pinning specific dependency versions in your `vcpkg.json` if needed
+- Baseline updates may introduce breaking changes from dependencies.
+- Review the vcpkg port changes included in the baseline update.
+- Consider pinning specific dependency versions in your `vcpkg.json` if needed.
 
 ## Learn more
 
