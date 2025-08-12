@@ -132,6 +132,8 @@
     href: concepts/continuous-integration.md
   - name: Default features
     href: concepts/default-features.md
+  - name: Dependabot support
+    href: concepts/dependabot.md
   - name: Features
     href: concepts/features.md
   - name: GitHub integration
