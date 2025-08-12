@@ -1,9 +1,9 @@
 ---
 title: Dependabot support for vcpkg
 description: This article describes how to use GitHub Dependabot to automatically update vcpkg dependencies in your projects.
-author: jamagee
+author: JamieMagee
 ms.author: jamagee
-ms.date: 8/5/2025
+ms.date: 8/12/2025
 ms.topic: concept-article
 ---
 # Dependabot support for vcpkg
