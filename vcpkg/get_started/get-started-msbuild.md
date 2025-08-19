@@ -18,7 +18,7 @@ dependencies, configure the project, build, and run a simple application.
 ## Prerequisites
 
 - [Visual Studio](<https://visualstudio.microsoft.com/downloads/>) with C++ development workload
-- [Git](https://git-scm.com/downloads)
+- [Git](<https://git-scm.com/downloads>)
 - Windows 7 or newer
 
 ## 1 - Set up vcpkg

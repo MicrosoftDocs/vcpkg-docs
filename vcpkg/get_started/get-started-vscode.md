@@ -20,7 +20,7 @@ dependencies, configure, build, and run a simple application.
 - [Visual Studio Code](<https://code.visualstudio.com>)
 - [C++ compiler](<https://code.visualstudio.com/docs/languages/cpp#_install-a-compiler>)
 - Windows 7 or newer
-- [Git](https://git-scm.com/downloads)
+- [Git](<https://git-scm.com/downloads>)
 - [Ninja](<https://ninja-build.org/>)
 
 ## 1 - Set up vcpkg
