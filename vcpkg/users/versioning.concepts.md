@@ -60,7 +60,7 @@ Since vcpkg has to satisfy all the constraints, the set of installed packages be
 
 - `A 1.1`, even when `A 1.2` exists, there are no constraints higher than `1.1` so vcpkg selects the minimum version possible.
 - `B 1.0`, transitively required by `A 1.1`.
-- `C 3.0`, upgraded by the transitive constraint added by `B 1.0` in order to satisfy version constraints.
+- `C 3.0`, upgraded by the transitive constraint added by `A 1.1` in order to satisfy version constraints.
 
 ## Constraint resolution
 

@@ -23,7 +23,7 @@ In this tutorial, you'll learn how to:
 
 > [!div class="checklist"]
 >
-> * [Provide a GitHub Personal Access Token](#1---provide-a-github-personal-access-token)
+> * [Configure authentication for GitHub Packages](#1---configure-authentication-for-github-packages)
 > * [Bootstrap vcpkg](#2---bootstrap-vcpkg)
 > * [Set up required environment variables](#3---set-up-required-environment-variables)
 > * [Add GitHub Packages as a NuGet source](#4---add-github-packages-as-a-nuget-source)
@@ -34,16 +34,30 @@ In this tutorial, you'll learn how to:
 * A GitHub repository using GitHub Actions
 * A project using vcpkg
 
-## 1 - Provide a GitHub Personal Access Token
+## 1 - Configure authentication for GitHub Packages
 
-Follow GitHub's instructions to [generate a classic Personal Access Token (PAT)](<https://docs.github.com/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic>) for your repository, make
-sure to give it the `packages:write` and `packages:read` permissions.
+This tutorial uses the built-in `GITHUB_TOKEN` provided by GitHub Actions. To enable
+both read and write access to GitHub Packages, add the following `permissions` block to your workflow:
 
-Then add your GitHub PAT as a [secret available in your repository's GitHub Action's workflows](<https://docs.github.com/actions/security-guides/using-secrets-in-github-actions>). In
-this tutorial we assume that you name your secret as `GH_PACKAGES_TOKEN`.
+```yaml
+permissions:
+  packages: write
+```
 
-The built-in PAT provided by `GITHUB_TOKEN` only has the `packages:read` permission, you can use
-it if you plan to have a read-only binary cache in your workflow.
+This grants the `GITHUB_TOKEN` the necessary `packages:write` and `packages:read` permissions.
+Using `GITHUB_TOKEN` has several advantages:
+
+* No need to create or manage additional secrets
+* Works automatically for pull requests from forks (with read-only access)
+* Scoped to the specific repository and workflow run
+
+> [!NOTE]
+> Alternatively, you can use a classic Personal Access Token (PAT) if you need cross-repository access
+> or other advanced scenarios. Follow GitHub's instructions to
+> [generate a classic Personal Access Token (PAT)](<https://docs.github.com/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic>)
+> with `packages:write` and `packages:read` permissions, then add it as a
+> [secret in your repository](<https://docs.github.com/actions/security-guides/using-secrets-in-github-actions>)
+> and use `${{ secrets.YOUR_PAT_NAME }}` instead of `${{ secrets.GITHUB_TOKEN }}` in the examples below.
 
 ## 2 - Bootstrap vcpkg
 
@@ -77,7 +91,8 @@ workflow, this tutorial assumes that vcpkg is located in a `vcpkg` folder in the
 
 ## 3 - Set up required environment variables
 
-Add the following environment variables to your workflow file (replace `<OWNER>` with your GitHub's username or organization's name):
+Add the following environment variables to your workflow file (replace `<OWNER>` with your GitHub's
+username or organization's name):
 
 ```YAML
 env: 
@@ -98,24 +113,32 @@ caching source, read the [binary caching reference](../users/binarycaching.md) t
 The `vcpkg fetch nuget` command outputs the location of the vcpkg-acquired `nuget.exe`, downloading
 the executable if necessary.
 
-Add the following step in your GitHub Actions workflow file:
+Add the following step to your workflow file to configure the NuGet source with your `GITHUB_TOKEN`:
 
 ::: zone pivot="windows-runner"
 
 ```YAML
-- name: Add NuGet sources
-  shell: pwsh
-  run: |
-    .$(${{ env.VCPKG_EXE }} fetch nuget) `
-      sources add `
-      -Source "${{ env.FEED_URL }}" `
-      -StorePasswordInClearText `
-      -Name GitHubPackages `
-      -UserName "${{ env.USERNAME }}" `
-      -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
-    .$(${{ env.VCPKG_EXE }} fetch nuget) `
-      setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" `
-      -Source "${{ env.FEED_URL }}"
+permissions:
+  packages: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    # ... other steps ...
+    - name: Add NuGet sources
+      shell: pwsh
+      run: |
+        .$(${{ env.VCPKG_EXE }} fetch nuget) `
+          sources add `
+          -Source "${{ env.FEED_URL }}" `
+          -StorePasswordInClearText `
+          -Name GitHubPackages `
+          -UserName "${{ env.USERNAME }}" `
+          -Password "${{ secrets.GITHUB_TOKEN }}"
+        .$(${{ env.VCPKG_EXE }} fetch nuget) `
+          setapikey "${{ secrets.GITHUB_TOKEN }}" `
+          -Source "${{ env.FEED_URL }}"
 ```
 
 ::: zone-end
@@ -133,29 +156,34 @@ Note that `ubuntu-22.04` GitHub Actions runners come with `mono` preinstalled, b
 `ubuntu-24.04` (which `ubuntu-latest` currently points to), `mono` no longer comes preinstalled.
 
 ```YAML
-- name: Add NuGet sources
-  shell: bash
-  env: 
-    VCPKG_EXE: ${{ github.workspace }}/vcpkg/vcpkg
-    USERNAME: <OWNER>
-    FEED_URL: https://nuget.pkg.github.com/<OWNER>/index.json
-  run: |
-    mono `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
-      sources add \
-      -Source "${{ env.FEED_URL }}" \
-      -StorePasswordInClearText \
-      -Name GitHubPackages \
-      -UserName "${{ env.USERNAME }}" \
-      -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
-    mono `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
-      setapikey "${{ secrets.GH_PACKAGES_TOKEN }}" \
-      -Source "${{ env.FEED_URL }}"
+permissions:
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # ... other steps ...
+    - name: Add NuGet sources
+      shell: bash
+      env: 
+        VCPKG_EXE: ${{ github.workspace }}/vcpkg/vcpkg
+        USERNAME: <OWNER>
+        FEED_URL: https://nuget.pkg.github.com/<OWNER>/index.json
+      run: |
+        mono `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+          sources add \
+          -Source "${{ env.FEED_URL }}" \
+          -StorePasswordInClearText \
+          -Name GitHubPackages \
+          -UserName "${{ env.USERNAME }}" \
+          -Password "${{ secrets.GITHUB_TOKEN }}"
+        mono `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+          setapikey "${{ secrets.GITHUB_TOKEN }}" \
+          -Source "${{ env.FEED_URL }}"
 ```
 
 ::: zone-end
-
-You may need to replace `GH_PACKAGES_TOKEN` with the correct secret name you gave to the PAT
-generated in the [provide a GitHub Personal Access Token step](#1---provide-a-github-personal-access-token).
 
 And that's it! vcpkg will now upload or restore packages from your NuGet feed hosted on GitHub
 Packages inside your GitHub Actions workflow.
