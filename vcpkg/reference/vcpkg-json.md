@@ -262,20 +262,22 @@ This field documents that a project is not expected to build or run successfully
 
 For example, if your library doesn't support building for Linux, you would use `"supports": "!linux"`.
 
-### `"vcpkg-configuration"`
+### <a name="configuration"></a> <a name="vcpkg-configuration"></a> `"configuration"`
 
-Allows to embed vcpkg configuration properties inside the `vcpkg.json` file. Everything inside the `vcpkg-configuration` property is treated as if it were defined in a `vcpkg-configuration.json` file. For more details, see the [`vcpkg-configuration.json`](../reference/vcpkg-configuration-json.md#registries) documentation.
+Allows to embed vcpkg configuration properties inside the `vcpkg.json` file. Everything inside the `configuration` property is treated as if it were defined in a `vcpkg-configuration.json` file. For more details, see the [`vcpkg-configuration.json`](../reference/vcpkg-configuration-json.md#registries) documentation.
 
-Having a `vcpkg-configuration` defined in `vcpkg.json` while also having a `vcpkg-configuration.json` file is not allowed and will result in the vcpkg command terminating with an error message.
+`vcpkg-configuration` is an older spelling of this field but is otherwise identical.
 
-#### Example embedded `vcpkg-configuration`
+Having a `configuration` or `vcpkg-configuration` defined in `vcpkg.json` while also having a `vcpkg-configuration.json` file is not allowed and will result in the vcpkg command terminating with an error message.
+
+#### Example embedded `configuration`
 
 ```json
 {
   "name": "test",
   "version": "1.0.0",
   "dependencies": [ "beison", "zlib" ],
-  "vcpkg-configuration": {
+  "configuration": {
     "registries": [
       {
         "kind": "git",
