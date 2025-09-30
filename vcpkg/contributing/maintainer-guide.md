@@ -1,9 +1,9 @@
 ---
 title: vcpkg Maintainer Guide
 description: The Guide for maintainers contributing to vcpkg.
-author: vicroms
-ms.author: viromer
-ms.date: 7/22/2024
+author: bion
+ms.author: bion
+ms.date: 9/30/2025
 ms.topic: concept-article
 ---
 # Maintainer guide
@@ -433,6 +433,37 @@ A lib is considered conflicting if it does any of the following:
 - Define symbols that are also declared in other libraries
 
 Conflicting libs are typically by design and not considered a defect.  Because some build systems link against everything in the lib directory, these should be moved into a subdirectory named `manual-link`.
+
+### Installing prebuilt binaries
+
+Ports that install prebuilt (binary-only) artifacts are allowed but strongly discouraged, provided that they don't effectively block changing the versions of other ports. Building from source is preferred because it respects all vcpkg's settings that change compiler or flags.
+
+We will reject ports that meet all the following conditions:
+
+1. Install prebuilt binaries rather than building from source, and
+2. Those binaries have (or require at runtime) dependencies that are provided by other ports in the curated registry, and
+3. The installed artifacts enter vcpkg's published link domain – i.e. they install libraries/headers/CMake or pkg-config metadata that downstream ports or user projects are expected to link against.
+
+Rationale: This combination effectively locks the ABI of the dependency graph to the versions used when the upstream prebuilt was produced. vcpkg cannot safely update (for example) `zlib`, `openssl`, or similar dependencies without risking subtle ODR / ABI breakage for consumers linking against the prebuilt library, and users may miss critical security patches.
+
+"Enters the published link domain" typically means any of:
+* Installing `.lib`, `.a`, `.so`, `.dylib`, or import libraries intended for consumers to link against.
+* Shipping headers that reference (directly or via inline/template code) symbols, types, or macros from other vcpkg ports.
+* Installing CMake config / pkg-config files that invoke `find_dependency()` / `Requires:` on other vcpkg ports.
+
+Allowed (but still discouraged) scenarios:
+* Host-only helper tools (executables) used at build time whose outputs are consumed but which are not themselves linked against by dependent ports, provided they either bundle dependencies privately or only rely on ubiquitous system runtime libraries.
+* Fully self-contained prebuilt libraries that statically link all OSS dependencies AND do not expose their symbols or types through installed headers or exported interfaces (consumers cannot observe or depend on transitive ABI).
+* Data-only, firmware, or asset packages not linked into user code.
+
+Forbidden examples:
+* A prebuilt `libfoo` that installs `lib/libfoo.lib` plus headers including `<zlib.h>` and was compiled against a specific `zlib` version; consumers then link against `libfoo` expecting compatibility.
+* A prebuilt SDK that installs a CMake package file calling `find_dependency(OpenSSL)` while the binary was compiled against an older OpenSSL release.
+
+Mitigations / alternatives:
+* Provide a from-source build using upstream scripts or add a thin CMake wrapper.
+* Ask upstream to publish a source-based release or reproducible build instructions; link the upstream issue/PR in a comment in `portfile.cmake` or `vcpkg.json`.
+* Use an [overlay port](../concepts/overlay-ports.md) or a private registry for organization-specific prebuilts that cannot satisfy these rules.
 
 ## Versioning
 
