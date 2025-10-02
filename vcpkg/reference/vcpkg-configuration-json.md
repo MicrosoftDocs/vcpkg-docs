@@ -14,7 +14,7 @@ in any dependencies are ignored.
 
 In [Manifest Mode](../concepts/manifest-mode.md), `vcpkg-configuration.json` can
 be in a separate file beside [`vcpkg.json`](vcpkg-json.md) or it can be embedded
-in the [`"vcpkg-configuration" field`](vcpkg-json.md#vcpkg-configuration).
+in the [`"configuration" field`](vcpkg-json.md#configuration).
 
 In [Classic Mode](../concepts/classic-mode.md), vcpkg will use the
 `vcpkg-configuration.json` file in the

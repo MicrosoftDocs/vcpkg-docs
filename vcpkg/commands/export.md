@@ -1,7 +1,7 @@
 ---
 title: vcpkg export
 description: Command line reference for the vcpkg export command. Create standalone SDK bundles.
-ms.date: 01/10/2024
+ms.date: 08/21/2025
 ---
 # vcpkg export
 
@@ -179,6 +179,12 @@ Note: `<port name>:<triplet>` arguments are not allowed when using `vcpkg export
 [!INCLUDE [experimental](../../includes/experimental.md)]
 
 Export all installed packages. This option is implied when using `vcpkg export` in manifest mode.
+
+<a id="dereference-symlinks"></a>
+
+### `--dereference-symlinks`
+
+Copies symlinks as regular files and directories in the exported results.
 
 <a id="dry-run"></a>
 

@@ -8,7 +8,10 @@ ms.topic: reference
 
 ## Configuration Syntax
 
-Binary caching is configured with the environment variable `VCPKG_BINARY_SOURCES` (set to `<source>;<source>;...`) and the command line option [`--binarysource=<source>`](../commands/common-options.md#binarysource). Options are evaluated first from the environment, then from the command line. Binary caching can be completely disabled by passing `--binarysource=clear` as the last command line option.
+Binary caching is configured with the environment variable `VCPKG_BINARY_SOURCES` (set to `<source>;<source>;...`) and
+the command line option [`--binarysource=<source>`](../commands/common-options.md#binarysource). Options are evaluated
+first from the environment, then from the command line. Binary caching can be completely disabled by passing
+`--binarysource=clear` as the last command line option.
 
 | Form                                             | Description                                                                                                                      |
 |--------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
@@ -19,7 +22,9 @@ Binary caching is configured with the environment variable `VCPKG_BINARY_SOURCES
 | [`nugetconfig,<path>[,<rw>]`](#nuget)            | Adds a NuGet-config-file-based source; equivalent to the `-Config` parameter of the NuGet CLI.                                   |
 | [`nugettimeout,<seconds>`](#nuget)               | Specifies a timeout for NuGet network operations; equivalent to the `-Timeout` parameter of the NuGet CLI.                       |
 | [`http,<url_template>[,<rw>[,<header>]]`](#http) | Adds a custom http-based location.                                                                                               |
-| [`x-azblob,<baseuri>,<sas>[,<rw>]`](#azblob)     | **Experimental: will change or be removed without warning**<br>Adds an Azure Blob Storage source using a Shared Access Signature |
+| [`x-azblob,<baseuri>,<sas>[,<rw>]`](#azblob)     | **Experimental: will change or be removed without warning**<br>Adds an Azure Blob Storage source using a Shared Access Signature. |
+| [`x-azcopy,<baseuri>,[,<rw>]`](#azcopy)          | **Experimental: will change or be removed without warning**<br>Adds an Azure Blob Storage. Supports [Microsoft Entra ID](/entra/fundamentals/whatis). Uses the [AzCopy tool](/azure/storage/common/storage-use-azcopy-v10). |
+| [`x-azcopy-sas,<baseuri>,<sas>[,<rw>]`](#azcopy-sas) | **Experimental: will change or be removed without warning**<br>Adds an Azure Blob Storage source using a Shared Access Signature. Uses the [AzCopy tool](/azure/storage/common/storage-use-azcopy-v10). |
 | [`x-gcs,<prefix>[,<rw>]`](#gcs)                  | **Experimental: will change or be removed without warning**<br>Adds a Google Cloud Storage (GCS) source.                         |
 | [`x-aws,<prefix>[,<rw>]`](#aws)                  | **Experimental: will change or be removed without warning**<br>Adds an AWS S3 source.                                            |
 | [`x-aws-config,<parameter>`](#aws)               | **Experimental: will change or be removed without warning**<br>Configure all AWS S3 providers.                                   |
@@ -84,6 +89,49 @@ vcpkg will attempt to avoid revealing the SAS during normal operations, however:
 1. It will be passed as a command line parameter to subprocesses, such as `curl.exe`
 
 Azure Blob Storage includes a feature to remove cache entries that haven't been accessed in a given number of days which can be used to automatically manage the size of your binary cache. See [Data Lifecycle Management on Microsoft Docs](/azure/storage/blobs/lifecycle-management-overview) for more information, or look for *Data management* -> *Lifecycle management* in the Azure Portal for your storage account.
+
+### <a name="azcopy"></a> Azure Blob Storage with AzCopy
+
+[!INCLUDE [experimental](../../includes/experimental.md)]
+
+> [!IMPORTANT]
+> You may need to set additional environment variables for the AzCopy executable to perform correctly.
+> The [`azcopy env` command](https://github.com/Azure/azure-storage-azcopy/wiki/azcopy_env) displays the list of environment
+> variables that affect the behavior of AzCopy.
+
+```
+x-azcopy,<baseuri>[,<rw>]
+```
+
+Adds a provider that uses the [AzCopy tool](/azure/storage/common/storage-use-azcopy-v10) to interact with an Azure Blob
+Storage container. The AzCopy tool supports [non-SAS-based authentication methods](<https://github.com/Azure/azure-storage-azcopy/wiki/azcopy_login>)
+like Microsoft Entra ID. To use SAS token authentication with AzCopy use the [`x-azcopy-sas`](#azcopy-sas) provider.
+
+We recommend setting the `AZCOPY_AUTO_LOGIN_TYPE` environment variable for use in non-interactive scenarios, for example,
+Continuous Integration. Otherwise, you need to preload your credentials for AzCopy before running any vcpkg commands using
+the [`azcopy login`](<https://github.com/Azure/azure-storage-azcopy/wiki/azcopy_login>) command.
+
+The `<baseuri>` parameter must include the container path, default Azure Storage URLs usually follow the form:
+`https://<account name>.blob.core.windows.net/<container name>`.
+### <a name="azcopy-sas"></a> Azure Blob Storage with AzCopy using a SAS token
+
+[!INCLUDE [experimental](../../includes/experimental.md)]
+
+> [!IMPORTANT]
+> You may need to set additional environment variables for the AzCopy executable to perform correctly.
+> The [`azcopy env` command](https://github.com/Azure/azure-storage-azcopy/wiki/azcopy_env) displays the list of environment
+> variables that affect the behavior of AzCopy.
+
+```
+x-azcopy-sas,<baseuri>,<sas>[,<rw>]
+```
+
+Adds a provider that uses the [AzCopy tool](/azure/storage/common/storage-use-azcopy-v10) to interact with an Azure Blob
+Storage container. This provider uses a SAS token authentication that is appended to every AzCopy request.
+
+The `<baseuri>` parameter must include the container path, default Azure Storage URLs usually follow the form:
+`https://<account name>.blob.core.windows.net/<container name>`. The `<sas>` parameter must be a valid SAS token, read the
+[`azblob` quickstart guide](#azblob-quickstart) to learn how to generate a valid SAS token.
 
 ### <a name="cos"></a> Tencent Cloud Object Storage provider
 
