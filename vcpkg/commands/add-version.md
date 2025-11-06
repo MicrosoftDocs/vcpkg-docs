@@ -27,6 +27,9 @@ To use the command:
 
 This will add or update the version entry for your port in the version database.
 
+> [!NOTE]
+> The hash used in the version database is computed from the complete file contents of the port. Any untracked files in the port directory will affect the resulting hash. Users should ensure that any files they do not intend to track are removed before invoking this command.
+
 ## Options
 
 All vcpkg commands support a set of [common options](common-options.md).
