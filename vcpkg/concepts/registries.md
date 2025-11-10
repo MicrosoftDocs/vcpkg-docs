@@ -323,7 +323,7 @@ array](../reference/vcpkg-configuration-json.md#registries).
 
 > [!NOTE]
 > Depending on the registry kind, you may need to provide different information
-> in the `registries` array. See the [`vcpkg-configurtion.json`
+> in the `registries` array. See the [`vcpkg-configuration.json`
 > reference](../reference/vcpkg-configuration-json.md#registries) to learn which
 > properties are required for each registry kind.
 

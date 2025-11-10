@@ -106,6 +106,16 @@ Most new PRs should be opened as drafts and converted to normal PRs once the CI 
 
 For more information about GitHub Draft PRs, see [Introducing draft pull requests](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
+The vcpkg team may convert your PR to draft during the review process. Usually, with a request to make changes
+to your code or comments indicating when to mark the PR as Ready for Review.
+
+#### Close inactive PRs
+
+To avoid accumulating stale PRs, the vcpkg team may close PRs that have been waiting for contributor
+action for more than 60 days. This countdown begins from the last time a vcpkg maintainer makes a
+request for changes or feedback, if no activity is observed within 60 days, the PR is considered
+stale and may be closed at the vcpkg's team discretion.
+
 ## Portfiles
 
 ### Avoid deprecated helper functions
