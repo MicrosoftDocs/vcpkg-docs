@@ -185,6 +185,20 @@ jobs:
 
 ::: zone-end
 
+> [!NOTE]
+> The default `GITHUB_TOKEN` provided by GitHub Actions does **not** have the required permissions to upload or download cached packages.  
+> To enable package caching to GitHub Packages, use a **Personal Access Token (PAT)** instead and ensure it includes the following scopes:
+>
+> - `packages:read`
+> - `packages:write`
+>
+> Store the PAT as a repository secret (for example, `VCPKG_PAT_TOKEN`) and reference it in your workflow:
+>
+> ```yaml
+> -Password: "${{ secrets.VCPKG_PAT_TOKEN }}"
+> -Source: "${{ env.FEED_URL }}"
+> ```
+
 And that's it! vcpkg will now upload or restore packages from your NuGet feed hosted on GitHub
 Packages inside your GitHub Actions workflow.
 
