@@ -75,6 +75,11 @@ The `versions` directory contains all the information about which versions of
 packages are contained in the registry, along with the method to retrieve those
 versions from the repository's history.
 
+The version file for each package is a JSON file with the same base name as the package,
+placed in a subdirectory of the versions directory which is the first letter of the
+package, followed by a dash.
+For example, the version file for the `pcre2` package is `versions\p-\pcre2.json`.
+
 #### Top-level fields
 
 | Name       | Type            | Description |
@@ -185,7 +190,7 @@ Publish packages to a private vcpkg registry using
 Git](../produce/publish-to-a-git-registry.md) article for an example of how to
 publish a port in a Git registry.
 
-### Filesystem registries
+## Filesystem registries
 
 ### <a name="filesystem-baseline"></a> Baseline file layout in filesystem registries
 
@@ -219,7 +224,7 @@ The layout of the baseline file in a filesystem registry is the same as for [Git
 registries](#git-baseline). The only difference being that filesystems
 don't require a `default` baseline.
 
-#### Example of a `baseline.json` file in a Git registry
+#### Example of a `baseline.json` file in a Filesystem registry
 
 ```json
 {
@@ -232,11 +237,17 @@ don't require a `default` baseline.
 }
 ```
 
-### <a name="filesystem-version-file"></a> Version file layout in Git registries
+### <a name="filesystem-version-file"></a> Version file layout in Filesystem registries
 
 The `versions` directory contains all the information about which versions of
 packages are contained in the registry, along with the method to retrieve those
 versions from a filesystem location.
+
+The version file for each package is a JSON file with the same base name as the package,
+placed in a subdirectory of the versions directory which is the first letter of the
+package, followed by a dash.
+For example, the version file for the `fmt` package is `versions\f-\fmt.json`.
+
 
 *Top-level fields*
 
