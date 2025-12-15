@@ -26,7 +26,7 @@ directly, such as one of the following:
 
 ```cmake
 vcpkg_download_distfile(
-    <OUT_VARIABLE>
+    <out-var>
     URLS <http://mainUrl> <http://mirror1>...
     FILENAME <output.zip>
     SHA512 <5981de...>
@@ -36,10 +36,23 @@ vcpkg_download_distfile(
 
 ## Parameters
 
-### OUT_VARIABLE
+### out-var
 
-This variable will be set to the full path to the downloaded file. This can then immediately be passed to
-[`vcpkg_extract_source_archive`](vcpkg_extract_source_archive.md) for sources.
+The name of the out variable to be set with the full path to the downloaded file.
+
+This variable can then immediately be passed to [`vcpkg_extract_source_archive`](vcpkg_extract_source_archive.md)
+for sources.
+
+Conventionally, `ARCHIVE` is used as the out variable name.
+
+```cmake
+vcpkg_donwload_distfile(
+    ARCHIVE #this is the out-var
+    URLS "https://downloads.apache.org/apr/apr-${VERSION}.tar.bz2"
+    FILENAME "apr-${VERSION}.tar.bz2"
+    SHA512 629b60680d1244641828019db903a1b199e8a19c8f27a5132b93faacb381ce561f88463345ab019258f1f1e8cfdf8aa986ac815153a8e7e04a22b3932f9fedd2
+)
+```
 
 ### URLS
 

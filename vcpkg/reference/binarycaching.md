@@ -190,6 +190,11 @@ Commas (`,`) are valid as part of a object prefix in GCS. Remember to escape the
 
 [!INCLUDE [experimental](../../includes/experimental.md)]
 
+> [!WARNING]
+> The `x-az-universal` provider is known to perform slowly with large numbers of
+> binary packages. The vcpkg team recommends using a different backend like
+> `x-azcopy` when possible.
+
 ```
 x-az-universal,<organization>,<project>,<feed>[,<rw>]
 ```

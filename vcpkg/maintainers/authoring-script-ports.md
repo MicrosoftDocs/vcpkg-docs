@@ -6,9 +6,9 @@ ms.author: viromer
 ms.date: 03/20/2024
 ms.topic: concept-article
 ---
-# Author helper ports
+# Authoring script ports
 
-Helper ports, also called script ports, expose functions for other ports to
+Script ports, also called helper ports, expose functions for other ports to
 consume during their build process. For instance, the `vcpkg-cmake` port defines
 the `vcpkg_cmake_configure()` function for other ports to consume. By packaging
 common scripts into a helper port, maintenance becomes more streamlined as
@@ -24,7 +24,7 @@ Before a port is executed, vcpkg will import any `vcpkg-port-config.cmake` file
 that has been exported by the direct dependencies of the port about to be
 executed.
 
-If a helper port depends on a different helper port, it must explicity import the
+If a helper port depends on a different helper port, it must explicitly import the
 `vcpkg-port-config.cmake` file of its dependency. Helper-to-helper port
 dependencies should not be marked as [host
 dependencies](../reference/vcpkg-json.md#dependency-host), this ensures that one
@@ -64,16 +64,15 @@ different helper port.
 `my-helper/portfile.cmake`
 
 ```cmake
-set(VCPKG_POLICY_HELPER_PORT enabled)
+set(VCPKG_POLICY_CMAKE_HELPER_PORT enabled)
 
-file(INSTALL
-  "${CMAKE_CURRENT_LIST_DIR}/vcpkg-port-config.cmake"
-  DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/my_helper_function.cmake" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/vcpkg-port-config.cmake" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 
 file(INSTALL "${VCPKG_ROOT_DIR}/LICENSE.txt" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
 ```
 
-By enabling the `VCPKG_POLICY_HELPER_PORT` policy, vcpkg enables post-build checks
+By enabling the `VCPKG_POLICY_CMAKE_HELPER_PORT` policy, vcpkg enables post-build checks
 that apply specifically to helper ports. Specifically, checks that `vcpkg-port-config.cmake` is
 installed in the correct path and that no files are installed in the `include` directory.
 
