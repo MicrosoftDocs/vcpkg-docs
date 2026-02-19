@@ -175,12 +175,12 @@ and may be closed at the team's discretion.
 A PR is in a reviewable state when it:
 
 - Passes all CI tests.
-  In case that a CI test fails, the contributor asks for help or justifies the reason for the buildfailures.
+  In case that a CI test fails, the contributor asks for help or justifies the reason for the failures.
 - Doesn't have any pending requested changes or clarifications from a vcpkg maintainer.
 - Doesn't have merge conflicts.
 - Isn't a draft.
 
-PRs inactive for more than 60 days and not in reviewable state, may be closed may be closed without a review.
+PRs inactive for more than 60 days and not in reviewable state, may be closed without a review.
 
 ## Portfiles
 
