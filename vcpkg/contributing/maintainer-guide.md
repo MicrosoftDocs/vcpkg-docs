@@ -1,20 +1,22 @@
 ---
 title: vcpkg Maintainer Guide
-description: The Guide for maintainers contributing to vcpkg.
-author: bion
-ms.author: bion
-ms.date: 9/30/2025
+description: This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
+author: vicroms
+ms.author: viromer
+ms.date: 2/18/2026
 ms.topic: concept-article
 ---
 # Maintainer guide
 
-This document lists a set of policies that you should apply when adding or updating a port recipe.
-It is intended to serve the role of
-[Debian's Policy Manual](https://www.debian.org/doc/debian-policy/),
-[Homebrew's Maintainer Guidelines](https://docs.brew.sh/Maintainer-Guidelines), and
-[Homebrew's Formula Cookbook](https://docs.brew.sh/Formula-Cookbook).
+This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
 
-## Overall registry design goals
+It is intended to serve the same role as:
+
+- [Debian's Policy Manual](https://www.debian.org/doc/debian-policy/),
+- [Homebrew's Maintainer Guidelines](https://docs.brew.sh/Maintainer-Guidelines), and
+- [Homebrew's Formula Cookbook](https://docs.brew.sh/Formula-Cookbook).
+
+## Curated registry design goals
 
 ### Ports must install simultaneously
 
@@ -36,8 +38,7 @@ Exceptions are made for:
 
 Ports that don't conform to this policy can't be accepted into the curated registry.
 
-If your port can't be included in the curated registry, consider publishing it in a [custom registry](../concepts/registries.md).
-Or use an [overlay port](../concepts/overlay-ports.md) to consume the port locally.
+[!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
 
 ### Ports must be tested in at least one official triplet
 
@@ -54,31 +55,71 @@ Exceptions are made for:
 New ports that can't be tested in at least one official triplet aren't accepted into the curated registry.
 Existing ports that no longer conform to this policy and aren't temporarily exempted are delisted form the registry.
 
-If your port can't be included in the curated registry, consider publishing it in a [custom registry](../concepts/registries.md).
-Or use an [overlay port](../concepts/overlay-ports.md) to consume the port locally.
+[!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
+
+### Packaged projects should be stable and actively maintained
+
+Projects packaged in the curated registry must be in active maintainance. Ports for inactive projects may be delisted.
+
+A project is considered inactive if:
+
+- Its maintainers have declared the project abandoned.
+- It is archived, or no longer accepting contributions.
+- Maintainers are unresponsive or unreachable.
+- No meaningful changes have been made in a long time.
+
+Exceptions are made for foundational projects that are considered mature and stable and don't receive changes often.
+For example: `zlib`.
+
+### Packaged projects should be mature
+
+Projects packaged in the curatred registry must be mature and intended for consumption by users of vcpkg. Projects intended
+for personal should be [published to custom registries](../produce/publish-to-a-git-registry.md).
+
+A project is considered mature enough for the curated registry, if one of these statements is true:
+
+- The project has a release that is at least six months old.
+- The project demonstrates at least six months of active public development.
+- The project is an official compoment of another project that satisfies the previous requirements.
+  For example, a new Boost library or Qt component.
+- The project demonstrates equivalent maturity to the previous requirements in some other capacity.
+
+Some indicators of project immaturity are:
+
+- The project doesn't show up in search engines.
+- The project has frequent renames.
+- Conflicts with other libraries.
+
+[!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
 
 ## PR structure
 
 ### Make separate pull requests per port
 
-Whenever possible, separate changes into multiple PRs.
-This makes them significantly easier to review and prevents issues with one set of changes from holding up every other change.
+Smaller pull requests (PRs) are easier to review. Pull requests should make changes to a single port. This also reduces
+the wait times for Continuous Integration (CI) results.
+
+Limiting PRs to a single port may not be possible in some cases. For example, when changing a port requires downstream
+consumers to be updated or patched.
 
 ### Avoid trivial changes in untouched files
 
-For example, avoid reformatting or renaming variables in portfiles that otherwise have no reason to be modified for the issue at hand.
-However, if you need to modify the file for the primary purpose of the PR (updating the library),
-then obviously beneficial changes like fixing typos are appreciated!
+Avoid unnecessary trivial changes to a port, such as: reformatting, renaming variables, or fixing typos. If these changes
+are not made as part of a necessary modification. Any change that doesn't affect the output of a port's installation is
+considered trivial. Trivial changes consume CI resources that are better utilized otherwise.
 
-### Check names against other repositories
+It's acceptable to make these type of changes as part of a more significant change, for example, as part of a port update.
 
-Port names should be indicative of its contents.
+<!-- The <a> tag is required to preserve old external links that use the previous header text-->
+### <a name="check-names-against-other-repositories"></a> Use distinctive port names
+
+A port's name should be indicative of its contents.
 
 Searching the port's name in a search engine or specialized package browsers, like [Repology](<https://repology.org>),
-should lead to the corresponding project.
+should lead to its corresponding project.
 
-Ports with short names or named after common words require disambiguation. This policy applies only to the name of the
-port in the curated registry. The packaged project name and its contents are not required to conform with this guideline.
+Ports with short names or named after common words require disambiguation. This applies only to the name of the port in
+the curated registry, the packaged project's name and its contents are not required to conform with this policy.
 
 Exceptions are made for ports that package a project with a strong association to its port's name. For example:  `libpng`,
 `openssl`, or `zlib`.
@@ -96,7 +137,7 @@ A port with the name `ip` is considered ambiguous because:
 
 - the name is too short,
 - the name is a common word, and
-- the name is not strongly associated to any singular project.
+- the name isn't strongly associated to any singular project.
 
 To determine if a name is ambiguous, remove the following common prefixes and suffixes used by C++ and open source projects
 from the port name:
@@ -137,7 +178,7 @@ A PR is in a reviewable state when it:
   In case that a CI test fails, the contributor asks for help or justifies the reason for the buildfailures.
 - Doesn't have any pending requested changes or clarifications from a vcpkg maintainer.
 - Doesn't have merge conflicts.
-- Is not a draft.
+- Isn't a draft.
 
 PRs inactive for more than 60 days and not in reviewable state, may be closed may be closed without a review.
 
