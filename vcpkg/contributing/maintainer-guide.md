@@ -20,7 +20,7 @@ It is intended to serve the same role as:
 
 ### Ports must install simultaneously
 
-A port included in the curated registry must build successfuly in the presence of all the other ports in the registry.
+A port included in the curated registry must build successfully in the presence of all the other ports in the registry.
 The entire combination of ports is tested regularly by vcpkg's automated CI.
 
 A port must not do any of the following:
@@ -34,7 +34,7 @@ Exceptions are made for:
 - Ports that replace another one in an official capacity. A successor project.
 - Ports where there is no platform overlap. For example, a Windows-only replacement to a Linux project that doesn't
   support Windows.
-- Ports that precede this policy and have a demostrably significant amount of users and contributors.
+- Ports that precede this policy and have a demonstrably significant number of users and contributors.
 
 Ports that don't conform to this policy can't be accepted into the curated registry.
 
@@ -50,16 +50,16 @@ Exceptions are made for:
   - The port doesn't build without an update to the CI infrastructure.
   - The port doesn't build because of a recent breaking change in an upstream dependency and there is work in progress
     to resolve the situation.
-- Ports that precede this policy and have a demostrably significant amount of users and contributors.
+- Ports that precede this policy and have a demonstrably significant number of users and contributors.
 
 New ports that can't be tested in at least one official triplet aren't accepted into the curated registry.
-Existing ports that no longer conform to this policy and aren't temporarily exempted are delisted form the registry.
+Existing ports that no longer conform to this policy and aren't temporarily exempted are delisted from the registry.
 
 [!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
 
 ### Packaged projects should be stable and actively maintained
 
-Projects packaged in the curated registry must be in active maintainance. Ports for inactive projects may be delisted.
+Projects packaged in the curated registry must be in active maintenance. Ports for inactive projects may be delisted.
 
 A project is considered inactive if:
 
@@ -73,14 +73,14 @@ For example: `zlib`.
 
 ### Packaged projects should be mature
 
-Projects packaged in the curatred registry must be mature and intended for consumption by users of vcpkg. Projects intended
-for personal should be [published to custom registries](../produce/publish-to-a-git-registry.md).
+Projects packaged in the curated registry must be mature and intended for consumption by users of vcpkg. Projects intended
+for personal use should be [published to custom registries](../produce/publish-to-a-git-registry.md).
 
 A project is considered mature enough for the curated registry, if one of these statements is true:
 
 - The project has a release that is at least six months old.
 - The project demonstrates at least six months of active public development.
-- The project is an official compoment of another project that satisfies the previous requirements.
+- The project is an official component of another project that satisfies the previous requirements.
   For example, a new Boost library or Qt component.
 - The project demonstrates equivalent maturity to the previous requirements in some other capacity.
 
@@ -104,11 +104,8 @@ consumers to be updated or patched.
 
 ### Avoid trivial changes in untouched files
 
-Avoid unnecessary trivial changes to a port, such as: reformatting, renaming variables, or fixing typos. If these changes
-are not made as part of a necessary modification. Any change that doesn't affect the output of a port's installation is
-considered trivial. Trivial changes consume CI resources that are better utilized otherwise.
-
-It's acceptable to make these type of changes as part of a more significant change, for example, as part of a port update.
+Don't make trivial changes to an otherwise unmodified port, such as: reformatting, renaming variables, or fixing typos. Any change that doesn't affect the output of a port's installation is
+considered trivial. Trivial changes consume compute time better utilized otherwise.
 
 <!-- The <a> tag is required to preserve old external links that use the previous header text-->
 ### <a name="check-names-against-other-repositories"></a> Use distinctive port names
@@ -129,7 +126,7 @@ To conform with this policy, new ports with ambiguous names can use a prefix, su
 - The repository's owner, username, or organization. Example: `google-cloud-cpp`.
   For ports of GitHub projects the GitHub owner is an acceptable unambiguous prefix `<github owner>-<repository name>`.
 - The name of a suite to which the package belongs to: `boost-dll`.
-  Only if the package is an official compoment of such a suite.
+  Only if the package is an official component of such a suite.
 
 #### Example: Ambiguous port name
 
@@ -148,7 +145,7 @@ from the port name:
 - `open`
 - numerals
 
-For example: `ip-cpp`, `libip` and `ip5`, are ambiguous because the are reduced to the same `ip` stem.
+For example: `ip-cpp`, `libip` and `ip5`, are ambiguous because they are reduced to the same `ip` stem.
 
 ### Limit port renames
 
@@ -174,11 +171,9 @@ and may be closed at the team's discretion.
 
 A PR is in a reviewable state when it:
 
-- Passes all CI tests.
-  In case that a CI test fails, the contributor asks for help or justifies the reason for the failures.
+- Has no failing PR checks, or the contributor asks for help or justifies the reason for the failures.
 - Doesn't have any pending requested changes or clarifications from a vcpkg maintainer.
 - Doesn't have merge conflicts.
-- Isn't a draft.
 
 PRs inactive for more than 60 days and not in reviewable state, may be closed without a review.
 
