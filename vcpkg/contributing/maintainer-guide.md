@@ -1,107 +1,155 @@
 ---
 title: vcpkg Maintainer Guide
-description: The Guide for maintainers contributing to vcpkg.
-author: bion
-ms.author: bion
-ms.date: 9/30/2025
+description: This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
+author: vicroms
+ms.author: viromer
+ms.date: 2/18/2026
 ms.topic: concept-article
 ---
 # Maintainer guide
 
-This document lists a set of policies that you should apply when adding or updating a port recipe.
-It is intended to serve the role of
-[Debian's Policy Manual](https://www.debian.org/doc/debian-policy/),
-[Homebrew's Maintainer Guidelines](https://docs.brew.sh/Maintainer-Guidelines), and
-[Homebrew's Formula Cookbook](https://docs.brew.sh/Formula-Cookbook).
+This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
 
-## Overall registry design goals
+It is intended to serve the same role as:
 
-### Ports in the current baseline must be installable simultaneously
+- [Debian's Policy Manual](https://www.debian.org/doc/debian-policy/),
+- [Homebrew's Maintainer Guidelines](https://docs.brew.sh/Maintainer-Guidelines), and
+- [Homebrew's Formula Cookbook](https://docs.brew.sh/Formula-Cookbook).
 
-We wish to be able to show downstream users of libraries in the curated registry that the
-combination of libraries in any given baseline we publish have been tested to work together in at
-least some configurations. Allowing ports to exclude each other breaks the ability to test such
-configurations, as the number of builds necessary for such tests would grow as
-`2^number_of_such_cases`. Moreover, installing additional dependencies is always considered "safe":
-there is no way for a port or end user to assert that a dependency is *not* installed in their
-requirements.
+## Curated registry design goals
 
-If you wish to represent such an alternative situation for users, consider describing how
-someone can create an [overlay port](../concepts/overlay-ports.md) implementing the alternative
-form with a comment in `portfile.cmake` rather than trying to add additional ports never built in
-the curated registry's continuous integration. For example, see
-[glad@0.1.36](https://github.com/microsoft/vcpkg/blob/67cc1677c3bf5c23ea14b9d2416c7422fdeac492/ports/glad/portfile.cmake#L17).
+### Ports must install simultaneously
 
-Before the introduction of [registries](../concepts/registries.md), we accepted several
-not tested ports-as-alternatives, such as `boringssl`, that could make authoring overlay ports
-easier. This is no longer accepted because registries allow publishing of these untested ports
-without modifying the curated registry.
+A port included in the curated registry must build successfully in the presence of all the other ports in the registry.
+The entire combination of ports is tested regularly by vcpkg's automated CI.
 
-### Use lowercase for hexadecimal digits strings
+A port must not do any of the following:
 
-Many of the features in vcpkg rely on comparing strings of hexadecimal digits. Some examples include, but are not limited to, SHA512 hashes, Git commit IDs, and tree object hashes.
+- [Install files that conflict with another port.](#unique-port-attribution-rule)
+- Install symbols and definitions owned by another package.
+- Test for the presence or absence of another port. Except for declaring a dependency.
 
+Exceptions are made for:
 
-Internally, vcpkg uses lowercase normalization for comparisons of such values where the casing is irrelevant. However, tooling
-built on top of vcpkg's infrastructure may not make the same considerations. For this reason, we require hexadecimal strings
+- Ports that replace another one in an official capacity. A successor project.
+- Ports where there is no platform overlap. For example, a Windows-only replacement to a Linux project that doesn't
+  support Windows.
+- Ports that precede this policy and have a demonstrably significant number of users and contributors.
 
-to be lowercased for consistency in the following scenarios:
+Ports that don't conform to this policy can't be accepted into the curated registry.
 
-* The `SHA512` parameter in vcpkg helper functions.
-* The `REF` parameter in vcpkg helper functions, when the value is a hexadecimal string.
-* The `git-tree` object in [version database files](../concepts/registries.md#versions-files).
-* The `sha512` object in the `scripts/vcpkg-tools.json` file.
-* Other places where casing of the hexadecimal string is unimportant.
+[!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
+
+### Ports must be tested in at least one official triplet
+
+All ports in the curated registry must be tested in CI for at least one official [triplet](../concepts/triplets.md).
+
+Exceptions are made for:
+
+- Temporary circumstances, such as:
+  - The port doesn't build without an update to the CI infrastructure.
+  - The port doesn't build because of a recent breaking change in an upstream dependency and there is work in progress
+    to resolve the situation.
+- Ports that precede this policy and have a demonstrably significant number of users and contributors.
+
+New ports that can't be tested in at least one official triplet aren't accepted into the curated registry.
+Existing ports that no longer conform to this policy and aren't temporarily exempted are delisted from the registry.
+
+[!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
+
+### Packaged projects should be stable and actively maintained
+
+Projects packaged in the curated registry must be in active maintenance. Ports for inactive projects may be delisted.
+
+A project is considered inactive if:
+
+- Its maintainers have declared the project abandoned.
+- It is archived, or no longer accepting contributions.
+- Maintainers are unresponsive or unreachable.
+- No meaningful changes have been made in a long time.
+
+Exceptions are made for foundational projects that are considered mature and stable and don't receive changes often.
+For example: `zlib`.
+
+### Packaged projects should be mature
+
+Projects packaged in the curated registry must be mature and intended for consumption by users of vcpkg. Projects intended
+for personal use should be [published to custom registries](../produce/publish-to-a-git-registry.md).
+
+A project is considered mature enough for the curated registry, if one of these statements is true:
+
+- The project has a release that is at least six months old.
+- The project demonstrates at least six months of active public development.
+- The project is an official component of another project that satisfies the previous requirements.
+  For example, a new Boost library or Qt component.
+- The project demonstrates equivalent maturity to the previous requirements in some other capacity.
+
+Some indicators of project immaturity are:
+
+- The project doesn't show up in search engines.
+- The project has frequent renames.
+- Conflicts with other libraries.
+
+[!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
 
 ## PR structure
 
 ### Make separate pull requests per port
 
-Whenever possible, separate changes into multiple PRs.
-This makes them significantly easier to review and prevents issues with one set of changes from holding up every other change.
+Smaller pull requests (PRs) are easier to review. Pull requests should make changes to a single port. This also reduces
+the wait times for Continuous Integration (CI) results.
+
+Limiting PRs to a single port may not be possible in some cases. For example, when changing a port requires downstream
+consumers to be updated or patched.
 
 ### Avoid trivial changes in untouched files
 
-For example, avoid reformatting or renaming variables in portfiles that otherwise have no reason to be modified for the issue at hand.
-However, if you need to modify the file for the primary purpose of the PR (updating the library),
-then obviously beneficial changes like fixing typos are appreciated!
+Don't make trivial changes to an otherwise unmodified port, such as: reformatting, renaming variables, or fixing typos. Any change that doesn't affect the output of a port's installation is
+considered trivial. Trivial changes consume compute time better utilized otherwise.
 
-### Check names against other repositories
+<!-- The <a> tag is required to preserve old external links that use the previous header text-->
+### <a name="check-names-against-other-repositories"></a> Use distinctive port names
 
-Port names should attempt to be unambiguous about which package the port
-installs. Ideally, searching the port's name in a search engine should quickly
-lead you to the corresponding project. A good service to check many package
-names across multiple repositories at once is [Repology](https://repology.org/).
+A port's name should be indicative of its contents.
 
-Projects with short names or named after common words may require
-disambiguation, specially when there are no projects with a strong association
-to the given word. For example, a port with the name `ip` is not acceptable
-since it is likely that multiple projects would be named similarly.
+Searching the port's name in a search engine or specialized package browsers, like [Repology](<https://repology.org>),
+should lead to its corresponding project.
 
-Examples of good disambiguators are:
+Ports with short names or named after common words require disambiguation. This applies only to the name of the port in
+the curated registry, the packaged project's name and its contents are not required to conform with this policy.
 
-* The repository's owner username or organization: `google-cloud-cpp`.
-* The name of a suite of libraries the project is part of: `boost-dll`.
+Exceptions are made for ports that package a project with a strong association to its port's name. For example:  `libpng`,
+`openssl`, or `zlib`.
 
-Common prefixes and suffixes used by C++ and open source projects are not valid
-disambiguators, some examples include but are not limited to: 
+To conform with this policy, new ports with ambiguous names can use a prefix, such as:
 
-* `cpp`, 
-* `free`,
-* `lib`, 
-* `open`, 
-* numbers
+- The repository's owner, username, or organization. Example: `google-cloud-cpp`.
+  For ports of GitHub projects the GitHub owner is an acceptable unambiguous prefix `<github owner>-<repository name>`.
+- The name of a suite to which the package belongs to: `boost-dll`.
+  Only if the package is an official component of such a suite.
 
-For example, when comparing the following port names: `ip-cpp`, `libip` and
-`ip5` and removing the invalid disambiguators they all are reduced to the same
-stem (`ip`) and thus are considered to have the same name.
+#### Example: Ambiguous port name
 
-An exception to this guideline is made for names that are strongly associated
-with a single project. For example: `libpng`, `openssl` and `zlib`.
+A port with the name `ip` is considered ambiguous because:
 
-To avoid confusion for users, we may limit the frequency at which a port can be
-renamed once it has been added to the public registry. Our current policy is to
-not allow more than one rename per year.
+- the name is too short,
+- the name is a common word, and
+- the name isn't strongly associated to any singular project.
+
+To determine if a name is ambiguous, remove the following common prefixes and suffixes used by C++ and open source projects
+from the port name:
+
+- `cpp`
+- `free`
+- `lib`
+- `open`
+- numerals
+
+For example: `ip-cpp`, `libip` and `ip5`, are ambiguous because they are reduced to the same `ip` stem.
+
+### Limit port renames
+
+To avoid confusion for users, ports cannot be renamed until after one year of their last rename.
 
 ### Use GitHub draft PRs
 
@@ -115,10 +163,19 @@ to your code or comments indicating when to mark the PR as Ready for Review.
 
 #### Close inactive PRs
 
-To avoid accumulating stale PRs, the vcpkg team may close PRs that have been waiting for contributor
-action for more than 60 days. This countdown begins from the last time a vcpkg maintainer makes a
-request for changes or feedback, if no activity is observed within 60 days, the PR is considered
-stale and may be closed at the vcpkg's team discretion.
+The vcpkg team may close pull requests (PRs) that have no activity for more than 60 days.
+
+For pull requests in a reviewable state, the countdown begins from the last time a vcpkg maintainer makes a request for
+changes, or asks for clarification. If no activity is made by the contributor within 60 days, the PR is considered stale
+and may be closed at the team's discretion.
+
+A PR is in a reviewable state when it:
+
+- Has no failing PR checks, or the contributor asks for help or justifies the reason for the failures.
+- Doesn't have any pending requested changes or clarifications from a vcpkg maintainer.
+- Doesn't have merge conflicts.
+
+PRs inactive for more than 60 days and not in reviewable state, may be closed without a review.
 
 ## Portfiles
 
@@ -155,6 +212,22 @@ version. Tools ports need to be added to your port's `"dependencies"`, like so:
 
 Ideally, portfiles should be short, simple, and as declarative as possible.
 Remove any boiler plate comments introduced by the `create` command before submitting a PR.
+
+### Use lowercase for hexadecimal digits strings
+
+Many of the features in vcpkg rely on comparing strings of hexadecimal digits. Some examples include, but are not limited to, SHA512 hashes, Git commit IDs, and tree object hashes.
+
+
+Internally, vcpkg uses lowercase normalization for comparisons of such values where the casing is irrelevant. However, tooling
+built on top of vcpkg's infrastructure may not make the same considerations. For this reason, we require hexadecimal strings
+
+to be lowercased for consistency in the following scenarios:
+
+* The `SHA512` parameter in vcpkg helper functions.
+* The `REF` parameter in vcpkg helper functions, when the value is a hexadecimal string.
+* The `git-tree` object in [version database files](../concepts/registries.md#versions-files).
+* The `sha512` object in the `scripts/vcpkg-tools.json` file.
+* Other places where casing of the hexadecimal string is unimportant.
 
 ### Ports must not be path dependent
 
