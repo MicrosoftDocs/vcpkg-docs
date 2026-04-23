@@ -3,7 +3,7 @@ title:  Supported hosts
 description: This article describes the platforms on which vcpkg is supported.
 author: bion
 ms.author: bion
-ms.date: 09/24/2025
+ms.date: 04/23/2026
 ms.topic: concept-article
 ---
 
@@ -17,7 +17,7 @@ vcpkg also depends on a few system components to be installed before it can run.
 
 To use vcpkg, a few components need to be installed on the system first.
 
-* Windows: Visual Studio 2015 or later.
+* Windows: Visual Studio 2017 or later.
 * macOS: Xcode Command Line Tools, tar, git, zip, unzip, and curl. Most ports also need `pkg-config`.
 We recommend installing these dependencies via Homebrew, such as via a terminal command
 `brew install zip unzip curl pkgconfig`.
@@ -63,8 +63,8 @@ macOS is intended to track the latest version of macOS and contemporary version 
 updating macOS machines is a manual process, and macOS frequently changes things in ways that break vcpkg's testing.
 As of this writing, we are using:
 
-* macOS 15.6.1
-* XCode Command Line Tools 16.4
+* macOS 26.1
+* XCode Command Line Tools 26.1
 
 ### Linux
 
@@ -72,7 +72,7 @@ As of this writing, we are using:
 
 ### Android
 
-* Linux 64-bit Android NDK version r28c
+* Linux 64-bit Android NDK version r29
 
 ## Full support, expected
 
@@ -104,7 +104,7 @@ ago, and is thus no longer supported.
 * CentOS and RHEL 7 are out of support from Red Hat, and are not expected to work as they were released more than 5
 years ago. The Oracle Linux fork now supported by Oracle is still in support from Oracle, but still not expected to
 work as it was released more than 5 years ago.
-* Fedora 42 and 41 are fully supported, but 40 is no longer supported by Fedora.
+* Fedora 43 and 42 are fully supported, but 41 is no longer supported by Fedora.
 * Debian 13 "Trixie", 12 "Bookworm", and 11 "Bullseye" are all supported by Debian and released in the last 5 years.
 Debian 10 "Buster" left support from the Debian project in July 2024 and is thus not supported by vcpkg.
 
@@ -171,6 +171,6 @@ or vcpkg will fail to extract its binary cache.
 
 * 32-bit Windows. Targeting x86-windows or arm-windows works just fine, but vcpkg itself expects to run AMD64 copies
 of support tooling like CMake.
-* Visual Studio 2013 or earlier.
+* Visual Studio 2015 or earlier.
 * Windows Vista or earlier.
 * macOS or Linux hosts older than those in one of the other above categories.
