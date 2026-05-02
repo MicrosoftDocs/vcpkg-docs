@@ -148,6 +148,14 @@ furnish muslc based copies of a number of dependencies like CMake.
 On BSD targets, no vcpkg binary is provided for download. Instead, the bootstrap logic will download the
 vcpkg source code and compile it locally.
 
+### OHOS (OpenHarmony / HarmonyOS)
+
+The community triplets `arm64-ohos`, `arm-ohos`, and `x64-ohos` target the OHOS platform, which
+is the shared toolchain and ABI used by both OpenHarmony and Huawei's HarmonyOS. Either the
+OpenHarmony SDK or the HarmonyOS SDK can be used; both provide the OHOS toolchain (CMake's
+`CMAKE_SYSTEM_NAME=OHOS`, target triples like `aarch64-unknown-linux-ohos`). Set `OHOS_SDK_ROOT`
+to point at the installed SDK.
+
 #### Dependencies
 
 vcpkg requires a number of software packages that are not part of the operating system and have to be installed using the package manager:
