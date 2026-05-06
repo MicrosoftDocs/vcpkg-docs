@@ -31,7 +31,7 @@ integration.
 This integration method automatically adds vcpkg-installed packages to the following project
 properties: Include Directories, Link Directories, and Link Libraries. Additionally, this creates a
 post-build action that ensures that any required DLLs are copied into the build output folder. This
-works for all solutions and projects using Visual Studio 2015 or newer.
+works for all solutions and projects using Visual Studio 2017 or newer.
 
 This is all you need to do for the vast majority of libraries. However, some libraries perform
 conflicting behaviors, such as redefining `main()`. Since you need to choose per-project which of
