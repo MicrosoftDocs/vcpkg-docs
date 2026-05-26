@@ -1,7 +1,7 @@
 ---
 title: vcpkg install
 description: Command line reference for the vcpkg install command. Build and install port packages.
-ms.date: 01/22/2025
+ms.date: 05/26/2026
 ---
 # vcpkg install
 
@@ -78,11 +78,17 @@ Clean the packages temporary subfolder after building each package.
 
 The packages subfolder for the built package (for example, `packages/zlib_x64-windows`) will be deleted after installation.
 
-### `--dry-run`
+### <a name="dry-run"></a> `--dry-run`
 
 Print the install plan, but do not remove or install any packages.
 
 The install plan lists all packages and features that will be installed, as well as any other packages that need to be removed and rebuilt.
+
+### <a name="skip-install-if-cached"></a> `--skip-install-if-cached`
+
+- **Manifest mode only**
+
+Skips installation entirely if everything in the installation plan is already present in binary cache(s).
 
 ### <a name="editable"></a> `--editable`
 
