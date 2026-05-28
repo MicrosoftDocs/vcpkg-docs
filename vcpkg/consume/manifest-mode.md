@@ -91,7 +91,7 @@ to remove MSBuild system-wide integration.
 This integration method automatically adds vcpkg-installed packages to the following project properties:
 `Include Directories`, `Link Directories`, and `Link Libraries`. Additionally, this creates a post-build action
 that ensures that any required DLLs are copied into the build output folder. This works for all solutions and
-projects using Visual Studio 2015 or newer.
+projects using Visual Studio 2017 or newer.
 
 ### [CMake](#tab/cmake)
 

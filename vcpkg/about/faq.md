@@ -209,7 +209,7 @@ We recommend building your libraries once with your preferred build configuratio
 
 ## What MSVC toolsets are supported?
 
-We support Visual Studio 2015 Update 3 and above.
+We support Visual Studio 2017 and above.
 
 ## Why does Visual Studio not use my libraries with user-wide integration enabled?
 

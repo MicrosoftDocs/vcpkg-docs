@@ -32,8 +32,6 @@ Integrate vcpkg with shells and buildsystems.
 
 Integrates with [Visual Studio](../users/buildsystems/msbuild-integration.md#user-wide-integration) (Windows-only), sets the user-wide vcpkg instance, and displays CMake integration help.
 
-On Windows with Visual Studio 2015, this subcommand will add redirecting logic into the MSBuild installation which will automatically pick up each user's user-wide vcpkg instance. Visual Studio 2017 and newer have this logic in the box.
-
 To set the user-wide vcpkg instance, vcpkg creates a few short files containing the absolute path to the vcpkg instance inside the user's user-wide configuration location:
 
 - `%LOCALAPPDATA%\vcpkg` or `%APPDATA%\Local\vcpkg` on Windows

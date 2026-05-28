@@ -46,7 +46,7 @@ for sources.
 Conventionally, `ARCHIVE` is used as the out variable name.
 
 ```cmake
-vcpkg_donwload_distfile(
+vcpkg_download_distfile(
     ARCHIVE #this is the out-var
     URLS "https://downloads.apache.org/apr/apr-${VERSION}.tar.bz2"
     FILENAME "apr-${VERSION}.tar.bz2"

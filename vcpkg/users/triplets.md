@@ -303,10 +303,10 @@ selection algorithm.
 
 Valid settings:
 
+- The Visual Studio 2026 platform toolset is `v145`.
 - The Visual Studio 2022 platform toolset is `v143`.
 - The Visual Studio 2019 platform toolset is `v142`.
 - The Visual Studio 2017 platform toolset is `v141`.
-- The Visual Studio 2015 platform toolset is `v140`.
 
 ### VCPKG_PLATFORM_TOOLSET_VERSION
 
