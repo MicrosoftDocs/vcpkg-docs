@@ -3,7 +3,7 @@ title: vcpkg in MSBuild projects
 description: Integrate vcpkg into an MSBuild or Visual Studio project.
 author: vicroms
 ms.author: viromer
-ms.date: 01/10/2024
+ms.date: 06/11/2026
 ms.topic: concept-article
 ---
 # vcpkg in MSBuild projects
@@ -212,13 +212,13 @@ classic mode, this defaults to `$(VcpkgRoot)\installed\`.
 ### `VcpkgApplocalDeps` (App-locally deploy DLLs)
 
 This property enables or disables detection and copying of dependent DLLs from the vcpkg installed
-tree to the project output directory.
+tree to the project output directory. It defaults to `true`.
 
 ### `VcpkgXUseBuiltInApplocalDeps` (Use built-in app-local deployment)
 
-This property, when enabled, uses vcpkg's experimental built-in app-local DLL deployment
-implementation when app-locally deploying DLLs. This property will be removed and have no effect
-when the built-in implementation is no longer experimental.
+This property controls which app-local DLL deployment implementation vcpkg uses when
+`VcpkgApplocalDeps` is enabled. It defaults to `true`, which uses the built-in `vcpkg z-applocal`
+implementation. Set it to `false` to use the legacy PowerShell `applocal.ps1` implementation.
 
 This property has no effect when `$(VcpkgApplocalDeps)` is false.
 
