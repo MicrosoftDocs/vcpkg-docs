@@ -160,18 +160,14 @@ In classic mode, the default is `${VCPKG_ROOT}/installed`.
 
 ### `VCPKG_APPLOCAL_DEPS`
 
-This option controls whether vcpkg automatically copies dependent DLLs into the output directory
+This variable controls whether vcpkg automatically copies dependent DLLs into the output directory
 for executables and shared libraries on Windows, UWP, and Xbox targets. It defaults to `ON`.
-
-When this option is enabled, vcpkg uses the built-in `vcpkg z-applocal` implementation by default.
 
 ### `VCPKG_USE_LEGACY_APPLOCAL`
 
-This option controls which app-local DLL deployment implementation vcpkg uses. It defaults to
+This variable controls which app-local DLL deployment implementation vcpkg uses. It defaults to
 `OFF`, which uses the built-in `vcpkg z-applocal` implementation. Set it to `ON` to use the legacy
 PowerShell `applocal.ps1` implementation.
-
-This option has an effect only when vcpkg performs app-local DLL deployment.
 
 ### `VCPKG_MANIFEST_MODE`
 
