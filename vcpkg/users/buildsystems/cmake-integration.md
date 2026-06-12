@@ -52,7 +52,7 @@ See [Installing and Using Packages Example: sqlite](../../examples/installing-an
 > If you set `CMAKE_TOOLCHAIN_FILE` in your `CMakeList.txt` file, make sure that
 > the variable is set before any calls to `project()`.
 
-Projects configured to use the vcpkg toolchain file (via the CMake setting `CMAKE_TOOLCHAIN_FILE`) can find libraries from vcpkg using the standard CMake functions: `find_package()`, `find_path()`, and `find_library()`.
+Projects configured to use the vcpkg toolchain file (via the CMake variable `CMAKE_TOOLCHAIN_FILE`) can find libraries from vcpkg using the standard CMake functions: `find_package()`, `find_path()`, and `find_library()`.
 
 We recommend using [CMake Presets] to specify your toolchain file. For example, if you have defined the environment variable `VCPKG_ROOT`, you can use the following `CMakePresets.json` and pass `--preset debug` on the configure line:
 
@@ -132,13 +132,13 @@ include(/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake)
 > [!NOTE]
 > vcpkg does not automatically apply your toolchain's settings, such as your compiler or compilation flags, while building libraries. To change vcpkg's library settings, you must make a [custom triplet file](../triplets.md) (which can [share your toolchain](../triplets.md#vcpkg_chainload_toolchain_file))**
 
-## Settings Reference
+## CMake Variables Reference
 
 All vcpkg-affecting variables must be defined before the first `project()` directive such as in a `CMakePresets.json`'s [`"cacheVariables"`](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html#configure-preset) map, via the command line, or `set()` statements.
 
 ### `VCPKG_TARGET_TRIPLET`
 
-This setting controls the [triplet](../triplets.md) vcpkg will install and consume libraries from.
+This variable controls the [triplet](../triplets.md) vcpkg will install and consume libraries from.
 
 If unset, vcpkg will automatically detect an appropriate default triplet given the current compiler settings. If you change this CMake variable, you must delete your cache and reconfigure.
 
@@ -268,7 +268,7 @@ When set to `ON`, Print every call to `find_package`. Nested calls (e.g. via `fi
 
 ### `VCPKG_LOCK_FIND_PACKAGE_<Pkg>`
 
-When this option is set, non-nested calls to [`find_package`](<https://cmake.org/cmake/help/latest/command/find_package.html>) are either
+When this variable is set, non-nested calls to [`find_package`](<https://cmake.org/cmake/help/latest/command/find_package.html>) are either
 required (`VCPKG_LOCK_FIND_PACKAGE_<Pkg>=ON`) or disabled (`VCPKG_LOCK_FIND_PACKAGE_<Pkg>=OFF`).
 
 This variable is a tool to control direct dependencies and related features in vcpkg ports
