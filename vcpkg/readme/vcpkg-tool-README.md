@@ -94,7 +94,7 @@ sudo npm install -g @microsoft/rush
 
 # License
 
-The product code in this repository is licensed under the [MIT License](LICENSE.txt). The tests
+The product code in this repository is licensed under the [MIT License](<https://github.com/microsoft/vcpkg-tool/blob/main/LICENSE.txt>). The tests
 contain 3rd party code as documented in `NOTICE.txt`.
 
 # Trademarks
