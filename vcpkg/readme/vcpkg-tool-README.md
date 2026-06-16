@@ -9,7 +9,7 @@ ROBOTS: NOINDEX
 
 # vcpkg: Overview
 
-vcpkg helps you manage C and C++ libraries on Windows, Linux and MacOS.
+vcpkg helps you manage C and C++ libraries on Windows, Linux, and macOS.
 This tool and ecosystem are constantly evolving, and we always appreciate contributions!
 
 Please see the main repository at <https://github.com/microsoft/vcpkg> for all feature discussion, issue
@@ -101,7 +101,7 @@ contain 3rd party code as documented in `NOTICE.txt`.
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
 trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
 
@@ -114,4 +114,4 @@ passing --disable-metrics to vcpkg on the command line,
 or by setting the VCPKG_DISABLE_METRICS environment variable.
 
 Read more about vcpkg telemetry at https://learn.microsoft.com/vcpkg/about/privacy
-in the main repository
+in the main repository.
