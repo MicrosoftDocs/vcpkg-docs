@@ -3,7 +3,7 @@ title: vcpkg in CMake projects
 description: Integrate vcpkg into a CMake project using a terminal, Visual Studio, Visual Studio Code, or other IDEs.
 author: vicroms
 ms.author: viromer
-ms.date: 01/10/2024
+ms.date: 06/11/2026
 ms.topic: concept-article
 ---
 # vcpkg in CMake projects
@@ -157,6 +157,17 @@ This variable sets the location where libraries will be installed and consumed f
 In manifest mode, the default is `${CMAKE_BINARY_DIR}/vcpkg_installed`.
 
 In classic mode, the default is `${VCPKG_ROOT}/installed`.
+
+### `VCPKG_APPLOCAL_DEPS`
+
+This variable controls whether vcpkg automatically copies dependent DLLs into the output directory
+for executables and shared libraries on Windows, UWP, and Xbox targets. It defaults to `ON`.
+
+### `VCPKG_USE_LEGACY_APPLOCAL`
+
+This variable controls which app-local DLL deployment implementation vcpkg uses. It defaults to
+`OFF`, which uses the built-in `vcpkg z-applocal` implementation. Set it to `ON` to use the legacy
+PowerShell `applocal.ps1` implementation.
 
 ### `VCPKG_MANIFEST_MODE`
 
