@@ -3,7 +3,7 @@ title: "Tutorial: Install a dependency from a manifest file"
 description: Learn to install your projects dependencies with vcpkg by using a manifest file.
 author: vicroms
 ms.author: viromer
-ms.date: 01/10/2024
+ms.date: 06/11/2026
 ms.topic: tutorial
 #CustomerIntent: As a beginner vcpkg user, I want to learn how to install my project dependencies using vcpkg in manifest mode
 ---
@@ -214,9 +214,9 @@ ClCompile:
 Link:
   (omitted)
 AppLocalFromInstalled:
-  pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\vcpkg\scripts\buildsystems\msbuild\applocal.ps1" "D:\projects\manif
-  est-mode-msbuild\x64\Debug\manifest-example.exe" "D:\projects\manifest-example\vcpkg_installed\x64-windows\x64-windows\debug\bin"
-  "x64\Debug\manifest.ceffc6eb.tlog\manifest-example.write.1u.tlog" "x64\Debug\vcpkg.applocal.log"
+  "D:\vcpkg\vcpkg.exe" z-applocal --target-binary="D:\projects\manifest-example\x64\Debug\manifest-example.exe"
+   --installed-bin-dir="D:\projects\manifest-example\vcpkg_installed\x64-windows\x64-windows\debug\bin"
+   --tlog-file="x64\Debug\manifest.ceffc6eb.tlog\manifest-example.write.1u.tlog" --copied-files-log="x64\Debug\vcpkg.applocal.log"
   D:\projects\manifest-example\x64\Debug\fmtd.dll
 FinalizeBuildStatus:
   (omitted)

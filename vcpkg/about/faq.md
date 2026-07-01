@@ -55,7 +55,7 @@ If you are using vcpkg in classic mode (running commands to manage packages, no 
 
 ## How do I get more libraries?
 
-The list of libraries is enumerated from the [`ports\`](https://github.com/Microsoft/vcpkg/blob/master/ports) directory. By design, you can add and remove libraries from this directory as you see fit for yourself or your company -- see our examples on packaging [zipfiles](../examples/packaging-zipfiles.md) and [GitHub repos](../examples/packaging-github-repos.md).
+The list of libraries is enumerated from the [`ports\`](https://github.com/microsoft/vcpkg/blob/master/ports) directory. By design, you can add and remove libraries from this directory as you see fit for yourself or your company -- see our examples on packaging [zipfiles](../examples/packaging-zipfiles.md) and [GitHub repos](../examples/packaging-github-repos.md).
 
 We recommend cloning directly from [GitHub](https://github.com/microsoft/vcpkg) and using `git pull` to update the list of portfiles.
 
@@ -116,7 +116,7 @@ option to redirect the working directory of `vcpkg.exe`.
 
 ## How does vcpkg protect my privacy?
 
-See the [Privacy document](privacy.md) for all information regarding privacy.
+See the [privacy document](privacy.md) for all information regarding privacy.
 
 ## Can I use my own CMake toolchain file with vcpkg's toolchain file?
 
@@ -227,7 +227,7 @@ NuGet is a package manager for .NET libraries with a strong dependency on MSBuil
 
 ## Why not Conan?
 
-Conan.io is a publicly-federated, project-centric, cross-platform, C++ package manager written in python. Our primary differences are:
+Conan.io is a publicly-federated, project-centric, cross-platform, C++ package manager written in Python. Our primary differences are:
 
 - **Public federation vs private federation**. Conan relies on individuals publishing independent copies of each package. We believe this approach encourages a large number of packages that are all broken in different ways. We believe it is a waste of user's time to pick through the list of 20+ public packages for Boost 1.56 to determine the handful that will work for their particular situation. In contrast, we believe there should be a single, collaboratively maintained version which works for the vast majority of cases and allow users to hack freely on their private versions. We believe this will result in a set of high quality packages that are heavily tested with each other and form a fantastic base for any private modifications you need.
 
@@ -235,7 +235,7 @@ Conan.io is a publicly-federated, project-centric, cross-platform, C++ package m
 
 - **Cross-platform vs single-platform**. While being hosted on many platforms is an excellent north star, we believe the level of system integration and stability provided by apt-get, yum, and homebrew is well worth needing to exchange `apt-get install libboost-all-dev` with `brew install boost` in automated scripts. We chose to make our system as easy as possible to integrate into a world with these very successful system managers -- one more line for `vcpkg install boost` -- instead of attempting to replace them where they are already so successful and well-loved.
 
-- **C++/CMake vs python**. While Python is an excellent language loved by many, we believe that transparency and familiarity are the most important factors when choosing a tool as important to your workflow as a package manager. Consequently, we chose to make the implementation languages be as universally accepted as possible: C++ should be used in a C++ package manager for C++ programmers. You should not be required to learn another programming language just to understand your package manager.
+- **C++/CMake vs Python**. While Python is an excellent language loved by many, we believe that transparency and familiarity are the most important factors when choosing a tool as important to your workflow as a package manager. Consequently, we chose to make the implementation languages be as universally accepted as possible: C++ should be used in a C++ package manager for C++ programmers. You should not be required to learn another programming language just to understand your package manager.
 
 ## Why not Chocolatey?
 

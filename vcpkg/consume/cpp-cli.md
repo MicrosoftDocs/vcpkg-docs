@@ -77,7 +77,7 @@ If the build fails make sure that you have installed the required components for
 Visual Studio listed in the [Prerequisites](#prerequisites) section, and that
 you meet the minimum requirements of [.NET 5.0
 SDK](https://dotnet.microsoft.com/download) or later and [Visual Studio 2019
-16.8](https://visualstudio.microsoft.com/downloads/) or later] of the [sample
+16.8](https://visualstudio.microsoft.com/downloads/) or later of the [sample
 application](https://github.com/dotnet/samples/tree/main/core/interop/cpp-cli).
 
 Once built, you can run `ManagedApp.exe`
@@ -177,7 +177,7 @@ automatcally install the dependencies contained in the manifest before building
 the project.
 
 While in the Properties page, we also want to enable the `/utf-8` flag to make
-`fmt` build correctly. 
+`fmt` build correctly.
 
 In the Command Line subsection of the C/C++ settings edit the Additional Options
 to include `/utf-8` in the 
@@ -232,7 +232,7 @@ message to the console using C++ code. The changes above make it so that the
 `fmt` library is consumed in the CLR application.
 
 No changs to the application's project are needed, just build and run the
-ManagedApp project. 
+ManagedApp project.
 
 The output of the program should look similar to this:
 
