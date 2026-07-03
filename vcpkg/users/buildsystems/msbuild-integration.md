@@ -205,9 +205,19 @@ See also [Host dependencies](../host-dependencies.md).
 ### `VcpkgInstalledDir` (Installed Directory)
 
 This property defines the location vcpkg will install and consume libraries from.
+Use [`VcpkgManifestInstalledBaseDir`](#vcpkgmanifestinstalledbasedir)
+in a solution which uses manifest mode and uses multiple triplets.
 
 In manifest mode, this defaults to `$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\`. In
 classic mode, this defaults to `$(VcpkgRoot)\installed\`.
+
+### <a name="vcpkgmanifestinstalledbasedir"></a> `VcpkgManifestInstalledBaseDir` (Installed Base Directory)
+
+When using manifest mode in solution which builds multiple triplets, setting `VcpkgInstalledDir`
+can be challanging because it must be different for projects which need different triplets.
+
+In this case one can set `VcpkgManifestInstalledBaseDir` which can be set globally and is
+appended by the triplet name.
 
 ### `VcpkgApplocalDeps` (App-locally deploy DLLs)
 
