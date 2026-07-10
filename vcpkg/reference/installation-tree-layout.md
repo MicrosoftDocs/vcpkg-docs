@@ -1,9 +1,9 @@
 ---
 title: Installation directory layout
 description: This article describes the layout conventions used by vcpkg when copying build output into the installation directory.
-author: vicroms
-ms.author: viromer
-ms.date: 01/10/2024
+author: BillyONeal
+ms.author: bion
+ms.date: 07/09/2026
 ms.topic: reference
 ---
 # Installation directory layout conventions
@@ -51,21 +51,23 @@ The layout for the subdirectories inside each triplet directory is the same:
 | [`debug/bin`](#layout-bin)                                         | Debug `.dll` and `.pdb` files                                     |
 | [`debug/lib`](#layout-lib)                                         | Debug `.lib`, `.so`, `.dylib`, and `.a` files                     |
 | [`debug/lib/manual-link`](#layout-manual-link)                     | Manually-linkable debug `.lib`, `.so`, `.dylib`, and `.a` files   |
-| [`debug/plugins/<group>`](#layout-plugins)                         | Runtime-load debug `.dll` files                                   |
-| [`debug/lib/pkgconfig`](#layout-pkgconfig)                         | Debug pkgconfig files (`.pc`)                                     |
-| [`include`](#layout-include)                                       | Header-files (`.h`, `.hpp`, `.hxx`)                               |
+| [`debug/plugins/<group>`](#layout-plugins)                         | Runtime-load debug shared libraries                               |
+| [`debug/lib/pkgconfig`](#layout-pkgconfig)                         | Debug pkg-config files (`.pc`)                                    |
+| [`include`](#layout-include)                                       | Header files (`.h`, `.hpp`, `.hxx`)                               |
 | [`lib`](#layout-lib)                                               | Release `.lib`, `.so`, `.dylib` and `.a` files                    |
 | [`lib/manual-link`](#layout-manual-link)                           | Manually-linkable release `.lib`, `.so`, `.dylib`, and `.a` files |
-| [`lib/pkgconfig`](#layout-pkgconfig)                               | Pkgconfig files (`.pc`)                                           |
-| [`plugins/<group>`](#layout-plugins)                               | Runtime-load release `.dll` files                                 |
+| [`lib/pkgconfig`](#layout-pkgconfig)                               | Release pkg-config files (`.pc`)                                  |
+| [`plugins/<group>`](#layout-plugins)                               | Runtime-load release shared libraries                             |
 | [`share/<port>`](#layout-share)                                    | Additional configuration-independent files                        |
 | [`share/<port>/copyright`](#layout-copyright)                      | The license text for the package                                  |
-| [`share/<port>/usage`](#layout-usage)                              | Buildsystem integration instructions file                         |
+| [`share/<port>/usage`](#layout-usage)                              | Build-system integration instructions file                        |
+| [`share/<port>/usage-accurate`](#layout-usage-accurate)            | Generated usage accuracy marker                                   |
+| [`share/<port>/vcpkg.spdx.json`](#layout-spdx)                     | Generated software bill of materials                              |
 | `share/<port>/vcpkg-port-config.cmake`                             | Port-defined CMake functions and variables                        |
 | [`share/<lowercase-package>/<package>Config.cmake`](#layout-cmake) | CMake integration files for `find_package(package)`               |
 | `share/<cmakepackagename>/vcpkg-cmake-wrapper.cmake`               | CMake `find_package(<cmakepackagename>)` override                 |
-| [`share/pkgconfig`](#layout-pkgconfig)                             | Configuration-independent pkgconfig files (`.pc`)                 |
-| [`tools/<port>`](#layout-tools)                                    | Executable tools                                                  |
+| [`share/pkgconfig`](#layout-pkgconfig)                             | Configuration-independent pkg-config files (`.pc`)                |
+| [`tools/<port>`](#layout-tools)                                    | Executable tools and supporting files                             |
 
 ### <a name="layout-bin"></a> `bin` and `debug/bin` directories
 
@@ -102,7 +104,7 @@ library is intended to define the `main()` function for a program.
 
 ### <a name="layout-pkgconfig"></a> `lib/pkgconfig`, `debug/lib/pkgconfig` and `share/pkgconfig` directories
 
-Contains pkgconfig integration files (`.pc`). A library should not provide
+Contains pkg-config integration files (`.pc`). A library should not provide
 configuration-dependent and configuration-independent files at the same time.
 For example: don't install `lib/pkgconfig/contoso.pc` and `share/pkgconfig/contoso.pc`.
 
@@ -128,6 +130,19 @@ for more information.
 A text file with instructions to integrate a library within a project.
 See the [guide to provide usage documentation for packages](../maintainers/handling-usage-files.md)
 for more information.
+
+### <a name="layout-usage-accurate"></a> `share/<port>/usage-accurate`
+
+An empty marker file that affirms vcpkg's generated usage information is
+accurate. When this file is installed, vcpkg omits the heuristic warning from
+the generated usage information. See the
+[usage documentation guide](../maintainers/handling-usage-files.md#affirming-generated-usage)
+for more information.
+
+### <a name="layout-spdx"></a> `share/<port>/vcpkg.spdx.json`
+
+The [software bill of materials](software-bill-of-materials.md) generated by
+vcpkg for the installed package.
 
 ### <a name="layout-cmake"></a> `share/<lowercase-package>/<package>Config.cmake`, `share/<package>/<package>-config.cmake`
 
