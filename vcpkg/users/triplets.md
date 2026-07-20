@@ -83,6 +83,21 @@ platform.
 See also the CMake documentation for [toolchain
 files](<https://cmake.org/cmake/help/v3.11/manual/cmake-toolchains.7.html>).
 
+### VCPKG_PROVIDED_FORTRAN
+
+Controls whether vcpkg supplies a fixed Fortran compiler for ports that use
+`vcpkg_find_fortran()`.
+
+When set to `ON`, vcpkg uses an architecture-matched MinGW `gfortran` instead
+of searching the host environment for a Fortran compiler. This makes package
+builds independent of other Fortran compilers installed on the host.
+
+The built-in x86 and x64 Windows triplets set this option to `ON`. MinGW and
+other triplets leave it `OFF` by default. To select a different Fortran
+compiler in a custom triplet, set this option to `OFF` and configure the
+compiler in
+[`VCPKG_CHAINLOAD_TOOLCHAIN_FILE`](#vcpkg_chainload_toolchain_file).
+
 ### VCPKG_CXX_FLAGS
 
 Sets additional compiler flags to be used when not using
