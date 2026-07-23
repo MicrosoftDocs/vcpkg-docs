@@ -86,7 +86,7 @@ files](<https://cmake.org/cmake/help/v3.11/manual/cmake-toolchains.7.html>).
 ### VCPKG_PROVIDED_FORTRAN
 
 Controls whether vcpkg supplies a fixed Fortran compiler for ports that use
-`vcpkg_find_fortran()`.
+[`vcpkg_find_fortran()`](../maintainers/functions/vcpkg_find_fortran.md).
 
 When set to `ON`, vcpkg uses an architecture-matched MinGW `gfortran` instead
 of searching the host environment for a Fortran compiler. This makes package
