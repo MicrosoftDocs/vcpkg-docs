@@ -1,24 +1,60 @@
 ---
 title: Provide usage documentation for your ports
 description: Guidance for adding usage documentation to vcpkg ports
-author: JavierMatosD
-ms.author: javiermat
-ms.date: 01/10/2024
+author: BillyONeal
+ms.author: bion
+ms.date: 07/09/2026
 ms.topic: concept-article
 ---
 # Provide usage documentation for your ports
 
 ## Overview
 
-Providing usage documentation for ports allows users to easily adopt them in their
-projects. We highly encourage providing a `usage` file within the port's directory (`ports/<port
-name>/usage`) that describes the minimal steps necessary to integrate with a build system.
+Providing accurate usage documentation for ports allows users to easily adopt
+them in their projects. vcpkg automatically generates usage information by
+inspecting the files installed by a port. Only provide a custom `usage` file
+when the generated usage information is incorrect or incomplete.
+
+After installing a port, run [`vcpkg print-usage`](../commands/print-usage.md)
+to inspect the usage information:
+
+```console
+vcpkg print-usage <port>:<triplet>
+```
+
+If the port already installs a custom `usage` file, you can use `--generated` to
+inspect what vcpkg generates without that file:
+
+```console
+vcpkg print-usage --generated <port>:<triplet>
+```
+
+### Affirming generated usage
+
+When the generated usage information is correct, install an empty
+`usage-accurate` marker file:
+
+```cmake
+file(TOUCH "${CURRENT_PACKAGES_DIR}/share/${PORT}/usage-accurate")
+```
+
+This marker affirms that the generated instructions are accurate, so vcpkg
+omits the warning that the instructions are heuristically generated and might
+be incorrect.
+
+Before adding the marker, you can use `--affirm` to preview the generated output
+without the warning:
+
+```console
+vcpkg print-usage --generated --affirm <port>:<triplet>
+```
 
 ### Supplying a usage file
 
-To provide usage documentation create a text file named `usage` in the port's `share`
-installation directory. The recommended method is to call the `file(INSTALL ...)` function in
-`portfile.cmake`.
+When generated usage information doesn't correctly describe how to consume the
+package, create a text file named `usage` in the port directory and install it
+to the port's `share` directory. The recommended method is to call the
+`file(INSTALL ...)` function in `portfile.cmake`.
 
 For example:
 
@@ -26,7 +62,9 @@ For example:
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 ```
 
-After installing ports, vcpkg detects files installed to `${CURRENT_PACKAGES_DIR}/share/${PORT}/usage` and prints their usage instructions.
+After installing a port, vcpkg detects the file installed to
+`${CURRENT_PACKAGES_DIR}/share/${PORT}/usage` and prints its instructions
+instead of generating usage information.
 
 ### Content format
 
