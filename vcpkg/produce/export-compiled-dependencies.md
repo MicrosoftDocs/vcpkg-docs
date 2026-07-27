@@ -1,8 +1,8 @@
 ---
 title: "Tutorial: Export compiled dependencies"
 description: In this tutorial we show you how to export compiled dependencies to be consumed by another project offline or on another machine.
-author: JavierMatosD
-ms.author: Javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ms.topic: tutorial
 # CustomerIntent: As an advanced vcpkg user I want to export compiled dependencies to be consumed by another project.

@@ -1,8 +1,8 @@
 ---
 title: Ports
 description: This article explains the concept of ports, their capabilities, and their expected contents in detail.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ms.topic: concept-article
 ---

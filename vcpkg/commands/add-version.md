@@ -1,8 +1,8 @@
 ---
 title: vcpkg x-add-version
 description: Reference for the vcpkg x-add-version command. Update version database of vcpkg ports.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ---
 

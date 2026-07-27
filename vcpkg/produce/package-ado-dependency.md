@@ -1,8 +1,8 @@
 ---
 title: "Tutorial: Package Azure DevOps dependency"
 description: In this tutorial we show you how to package an Azure DevOps dependency for vcpkg.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/31/2024
 ms.topic: tutorial
 # CustomerIntent: As an advanced vcpkg user I want to package a private Azure DevOps dependency.

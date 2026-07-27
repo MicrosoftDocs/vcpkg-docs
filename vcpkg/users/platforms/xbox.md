@@ -1,7 +1,7 @@
 ---
 title: Xbox
 description: Use x64 community triplets for Xbox development.
-author: walbourn
+author: vicroms
 ms.author: viromer
 ms.date: 01/10/2024
 ms.topic: concept-article

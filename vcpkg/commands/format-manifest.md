@@ -1,8 +1,8 @@
 ---
 title: vcpkg format-manifest
 description: Reference for the vcpkg format-manifest command. Formats vcpkg.json files and converts CONTROL files to vcpkg.json format.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 07/16/2024
 ---
 
