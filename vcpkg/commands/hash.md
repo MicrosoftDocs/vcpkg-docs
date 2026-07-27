@@ -1,8 +1,8 @@
 ---
 title: vcpkg hash
 description: Reference for the vcpkg hash command. Computes the hash of a specified file.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: vcpkg contact
 description: Reference for the vcpkg contact command. Provides an official contact (vcpkg@microsoft.com)
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ms.service: vcpkg
 ---
