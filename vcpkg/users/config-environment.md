@@ -1,10 +1,16 @@
 ---
 title: Environment variables
 description: Use environment variables to control how vcpkg works and where it looks for files.
-ms.date: 01/10/2024
+ms.date: 06/25/2026
 ms.topic: reference
 ---
 # Environment variables
+
+## CURL_CA_BUNDLE
+
+This environment variable can be set to the path of a certificate authority (CA) bundle file to use for HTTPS
+downloads. See the [curl documentation for SSL certificates](https://curl.se/docs/sslcerts.html) for more
+information.
 
 ## <a name="editor"></a> :::no-loc text="EDITOR":::
 
