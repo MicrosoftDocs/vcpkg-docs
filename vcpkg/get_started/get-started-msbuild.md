@@ -3,8 +3,8 @@ title: Install and use packages with MSBuild in Visual Studio
 description: Tutorial guides the user through the process of installing and using packages with MSBuild and Visual Studio.
 zone_pivot_group_filename: zone-pivot-groups.json
 zone_pivot_groups: shell-selections
-author: data-queue
-ms.author: danshaw2
+author: BillyONeal
+ms.author: bion
 ms.date: 07/29/2024
 ms.topic: tutorial
 ---

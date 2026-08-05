@@ -1,8 +1,8 @@
 ---
 title: vcpkg help
 description: Reference for the vcpkg help command. Provides detailed information and help topics for vcpkg commands.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ---
 

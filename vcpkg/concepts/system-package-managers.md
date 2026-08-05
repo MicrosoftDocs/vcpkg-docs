@@ -1,8 +1,8 @@
 ---
 title: Using vcpkg compared to system package managers
 description: Concepts on system package managers
-author: data-queue
-ms.author: danshaw2
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ms.topic: concept-article
 ---

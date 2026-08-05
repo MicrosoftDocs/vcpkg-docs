@@ -1,8 +1,8 @@
 ---
 title: Understanding default features in vcpkg
 description: This article explains the concept of default features, their capabilities, and their expected contents in detail.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 02/01/2024
 ms.topic: concept-article
 ---

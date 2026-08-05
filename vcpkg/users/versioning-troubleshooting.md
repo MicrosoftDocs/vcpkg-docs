@@ -1,8 +1,8 @@
 ---
 title: Troubleshoot versioning and feature selection issues
 description: Troubleshooting guide for common versioning issues
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ms.topic: troubleshooting-general
 ---

@@ -3,8 +3,8 @@ title: "Tutorial: Add a port to the vcpkg open-source registry"
 description: Tutorial guides the user through the process of adding a port to the vcpkg open-source registry.
 zone_pivot_group_filename: zone-pivot-groups.json
 zone_pivot_groups: shell-selections
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.topic: tutorial
 ms.date: 01/26/2024
 #CustomerIntent: As a beginner C++ developer, I want to learn how to add a port to the vcpkg registry.

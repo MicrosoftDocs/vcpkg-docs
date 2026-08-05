@@ -3,10 +3,10 @@ title: "Tutorial: Package a library with vcpkg"
 description: Tutorial guides the user through the process of packaging a library for vcpkg.
 zone_pivot_group_filename: zone-pivot-groups.json
 zone_pivot_groups: shell-selections
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.topic: tutorial
-ms.date: 7/16/2024
+ms.date: 07/09/2026
 #CustomerIntent: As a beginner C++ developer, I want to learn how to package libraries for vcpkg using custom overlays.
 ---
 
@@ -129,23 +129,16 @@ to build, install, and manage the package.
 For more information on `vcpkg.json`, see the following documentation on
 [manifests](../reference/vcpkg-json.md).
 
-Now, create the `usage` file within the `custom-overlay\vcpkg-sample-library`
-directory with the following content:
-
-```usage
-vcpkg-sample-library provides CMake targets:
-
-find_package(my_sample_lib CONFIG REQUIRED)
-target_link_libraries(main PRIVATE my_sample_lib::my_sample_lib)
-```
-
 Providing usage documentation for ports allows users to easily adopt them in
-their projects. We highly encourage providing a `usage` file within the port's
-directory (`ports/<port name>/usage`) that describes the minimal steps necessary
-to integrate with a build system. To determine the correct usage instructions it
-is recommended to follow upstream's guidance. In the case that upstream does not
-provide usage information, it may be necessary to dig through their build system
-to find the exported targets.
+their projects. vcpkg generates usage information for many ports by inspecting
+their installed files. The generated instructions are correct for this sample,
+so no custom `usage` file is needed. Instead, the portfile creates a
+`usage-accurate` marker to affirm that the generated instructions are accurate.
+
+Add a custom `usage` file only when the generated instructions are incorrect or
+incomplete. To determine the correct usage instructions, follow upstream's
+guidance. When upstream doesn't provide usage information, it might be necessary
+to inspect its build system to find the exported targets.
 
 For more guidance, see [handling usage files](../maintainers/handling-usage-files.md)
 
@@ -173,7 +166,7 @@ vcpkg_cmake_config_fixup(PACKAGE_NAME "my_sample_lib")
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 
-file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+file(TOUCH "${CURRENT_PACKAGES_DIR}/share/${PORT}/usage-accurate")
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
 ```
 
@@ -199,8 +192,8 @@ C++ library from GitHub using vcpkg.
   package configuration files to be compatible with vcpkg.
 - `file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")`: Deletes the
   include directory from the debug installation to prevent overlap.
-- `file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" ...)`: Copies a usage
-  instruction file to the package's share directory.
+- `file(TOUCH ".../usage-accurate")`: Affirms that vcpkg's generated usage
+  instructions are accurate.
 - `vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")`: Installs the LICENSE
   file to the package's share directory and renames it to copyright.
 
@@ -249,7 +242,6 @@ Building vcpkg-sample-library:x64-windows...
 -- Configuring x64-windows
 -- Building x64-windows-dbg
 -- Building x64-windows-rel
--- Installing: C:/Users/dev/demo/vcpkg/packages/vcpkg-sample-library_x64-windows/share/vcpkg-sample-library/usage
 -- Installing: C:/Users/dev/demo/vcpkg/packages/vcpkg-sample-library_x64-windows/share/vcpkg-sample-library/copyright
 -- Performing post-build validation
 Stored binaries in 1 destinations in 94 ms.

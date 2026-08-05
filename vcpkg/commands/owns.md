@@ -1,8 +1,8 @@
 ---
 title: vcpkg owns
 description: Reference for the vcpkg owns command. Determines which installed package owns a particular file or files matching a substring.
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.date: 01/10/2024
 ---
 # vcpkg owns

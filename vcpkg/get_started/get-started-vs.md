@@ -3,8 +3,8 @@ title: Install and use packages with CMake in Visual Studio
 description: Tutorial guides the user through the process of installing and using packages with CMake and Visual Studio.
 zone_pivot_group_filename: zone-pivot-groups.json
 zone_pivot_groups: shell-selections
-author: JavierMatosD
-ms.author: javiermat
+author: BillyONeal
+ms.author: bion
 ms.topic: tutorial
 ms.date: 7/16/2024
 #CustomerIntent: As a beginner C++ developer, I want to learn how to install and manage packages using CMake and Visual Studio, so that I can easily set up and maintain C++ projects with necessary dependencies.

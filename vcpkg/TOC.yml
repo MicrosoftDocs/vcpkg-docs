@@ -231,6 +231,8 @@
       href: commands/new.md
     - name: vcpkg owns
       href: commands/owns.md
+    - name: vcpkg print-usage
+      href: commands/print-usage.md
     - name: vcpkg remove
       href: commands/remove.md
     - name: vcpkg search
