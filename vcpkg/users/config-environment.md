@@ -17,6 +17,17 @@ information.
 This environment variable can be set to the full path of an executable to be used for `vcpkg edit`. Please see
 `vcpkg help edit` for command-specific help.
 
+## VCPKG_BINARY_CACHE_COMPRESSION_LEVEL
+
+Sets the compression level for binary-cache ZIP archives to a single digit from `0` to `9`.
+`0` stores files without compression, `1` requests the fastest compression, and `9` requests maximum compression.
+
+The [`--binary-cache-compression-level`](../commands/common-options.md#binary-cache-compression-level)
+command-line option takes precedence over this variable. When neither setting is supplied, the archive tool's
+default compression level is used. Invalid values, including an empty value, are rejected when initializing the binary cache.
+
+This setting affects ZIP creation for binary caching, not NuGet packaging. It does not invalidate existing cache entries.
+
 ## VCPKG_BINARY_SOURCES
 
 This environment variable adds or removes binary sources. See [Binary Caching][] for more details.
