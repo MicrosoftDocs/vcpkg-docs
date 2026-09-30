@@ -362,7 +362,9 @@ Disabling a default feature as a 'transitive' consumer requires:
 * All customers explicitly disabling default features via [`"default-features": false`](../reference/vcpkg-json.md#dependency-default-features) or including `[core]` in the feature list on the command line.
 * Naming the transitive dependency on the `vcpkg install` command line, or as a direct dependency in the top level manifest
 
-In vcpkg's curated registry, if the feature adds additional APIs, executables, or other binaries, it must be off by default. If in doubt, do not mark a feature as default.
+For this policy, an API is any interface exposed to consumers, including library interfaces, executable command-line interfaces, and other binary interfaces. A feature may be enabled by default when it adds behavior behind an existing API, such as support for additional compression algorithms through an existing generic interface.
+
+In vcpkg's curated registry, if a feature adds an API, it must be off by default. If in doubt, do not mark a feature as default.
  
 
 ### Do not use features to control alternatives in published interfaces
