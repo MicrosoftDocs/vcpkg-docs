@@ -597,11 +597,12 @@ When creating a new port, follow the versioning convention used by the package a
 
 If upstream has not published a release in a while, do not change the port's versioning scheme to `version-date` in order to get the latest changes. These commits may include changes that are not production ready. Instead ask the upstream repository to publish a new release.
 
-### Update the `"port-version"` field in the manifest file of any modified ports
+### Update the `"port-version"` field for every modified port
 
-vcpkg uses this field to determine whether a given port is out-of-date and should be changed whenever the port's behavior changes.
+Every modification to a port changes its Git tree and must produce a new port version.
 
-Our convention is to use the `"port-version"` field for changes to the port that don't change the upstream version, and to reset the `"port-version"` back to zero when an update to the upstream version is made.
+If the upstream version hasn't changed, increment the `"port-version"` field. If the upstream version has changed, reset
+`"port-version"` to zero by removing the field or setting it to `0`.
 
 For Example:
 
@@ -611,7 +612,7 @@ For Example:
 
 See the [versioning documentation](../users/versioning.md#port-version) for more information.
 
-### Update the version files in `versions/` of any modified ports
+### Update the version files in `versions/` for every modified port
 
 vcpkg uses a set of metadata files to power its versioning feature.
 These files are located in the following locations:
@@ -624,7 +625,7 @@ For example, for `zlib` the relevant files are:
 - `${VCPKG_ROOT}/versions/baseline.json`
 - `${VCPKG_ROOT}/versions/z-/zlib.json`
 
-We expect that each time you update a port, you also update its version files.
+Every time you modify a port, update its version files to record the new Git tree.
 
 **The recommended method to update these files is to run the `x-add-version` command, e.g.:**
 
