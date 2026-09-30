@@ -162,16 +162,14 @@ Most new PRs should be opened as drafts and converted to normal PRs once the CI 
 
 For more information about GitHub Draft PRs, see [Introducing draft pull requests](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
-The vcpkg team may convert your PR to draft during the review process. Usually, with a request to make changes
-to your code or comments indicating when to mark the PR as Ready for Review.
+A vcpkg maintainer may convert your PR to draft during the review process, usually when requesting changes or leaving
+comments that indicate when to mark the PR as ready for review.
 
 #### Close inactive PRs
 
-The vcpkg team may close pull requests (PRs) that have no activity for more than 60 days.
-
-For pull requests in a reviewable state, the countdown begins from the last time a vcpkg maintainer makes a request for
-changes, or asks for clarification. If no activity is made by the contributor within 60 days, the PR is considered stale
-and may be closed at the team's discretion.
+A vcpkg maintainer may close a PR after it has been waiting for action from the contributor for more than
+60 days. The inactivity countdown runs only while contributor action is required. It doesn't run while the PR is waiting
+for build lab verification, or review by a vcpkg maintainer.
 
 A PR is in a reviewable state when it:
 
@@ -179,7 +177,12 @@ A PR is in a reviewable state when it:
 - Doesn't have any pending requested changes or clarifications from a vcpkg maintainer.
 - Doesn't have merge conflicts.
 
-PRs inactive for more than 60 days and not in reviewable state, may be closed without a review.
+The countdown begins when the PR enters a state that requires contributor action. This can happen when a PR is opened
+with problems the contributor needs to address, or when a vcpkg maintainer requests changes or clarification. A vcpkg
+maintainer may mark the PR as a draft when requesting contributor action.
+
+A substantive response from the contributor resets the countdown. If the response resolves all pending requests and the
+PR is ready for review, the countdown resets. If the contributor doesn't respond within 60 days, the PR is considered stale and may be closed by a vcpkg maintainer' discretion.
 
 ## Portfiles
 
