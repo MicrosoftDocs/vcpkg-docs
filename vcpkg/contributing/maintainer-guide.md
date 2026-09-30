@@ -555,20 +555,20 @@ vcpkg_cmake_configure(
 
 ### Place conflicting libs in a `manual-link` directory
 
-A library is considered conflicting if it does any of the following:
+A `.lib` file is considered conflicting if it does any of the following:
 
 - Defines `main`.
 - Defines `malloc`.
 - Defines symbols that are also defined in other libraries.
 
-Some libraries intentionally provide narrowly scoped replacements for symbols that consumers would otherwise define or
+Some `.lib` files intentionally provide narrowly scoped replacements for symbols that consumers would otherwise define or
 obtain elsewhere. For example, Google Test's `gtest-main.lib` provides `main` for test executables whose authors choose
 to use it instead of defining their own entry point.
 
-Place these libraries in a `manual-link` subdirectory of the library directory so build systems that link every library
+Place these files in a `manual-link` subdirectory of the library directory so build systems that link every `.lib` file
 in that directory don't select them automatically. Consumers must explicitly opt in to linking them and are responsible
 for avoiding conflicting definitions. This exception isn't a general mechanism for packaging alternative providers of
-another component, and moving a library into `manual-link` doesn't isolate its symbols from the consumer's link domain.
+another component, and moving a `.lib` file into `manual-link` doesn't isolate its symbols from the consumer's link domain.
 
 ### Installing prebuilt binaries
 
