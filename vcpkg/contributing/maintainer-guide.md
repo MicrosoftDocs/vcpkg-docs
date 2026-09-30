@@ -406,23 +406,30 @@ message(STATUS "See the overlay ports documentation at https://github.com/micros
 
 ### Do not use vendored dependencies
 
-Do not use embedded copies of libraries.
-All dependencies should be split out and packaged separately so they can be updated and maintained.
+Prefer to package dependencies separately so users can select and update them through vcpkg. Vendored dependencies
+introduce several challenges:
 
-Vendored dependencies introduce several challenges that conflict with vcpkg’s goals of providing a reliable, consistent, and maintainable package management system:
+- **Difficulty updating:** Vendored dependencies are harder to track and update, including when applying security fixes.
+- **Symbol conflicts:** A vendored dependency can define the same symbols as another version of the dependency, causing
+  runtime errors or undefined behavior.
+- **Licensing compliance:** Vendored dependencies can obscure licensing requirements or create license compatibility
+  issues.
+- **Increased maintenance:** Keeping vendored dependencies synchronized with their upstream versions increases maintenance
+  work and can duplicate work across ports.
 
-Difficulty in Updates: Embedded copies of libraries make it harder to track and apply updates, including security patches, from the upstream projects. This leads to potential security risks and outdated dependencies in the ecosystem.
+For these reasons, devendor dependencies whenever practical. Vendored dependencies must not be exposed to a user's link
+domain.
 
-Symbol Conflicts: Vendored dependencies can cause symbol conflicts when multiple packages include different versions of the same library. 
-  
-  For example:
-  If Package A vendors Library X (version 1) and Package B vendors Library X (version 2), an application linking both packages may experience runtime errors or undefined behavior due to conflicting symbols.
+A link domain is the set of symbols that can resolve against one another at runtime. On Windows, each DLL generally has
+its own link domain. On platforms with a process-wide symbol table, the link domain generally includes the entire process.
 
-By packaging dependencies separately, vcpkg ensures a single version of a library is used across all packages, eliminating such conflicts.
+If a component exposes a vendored dependency to the same link domain as a dependency selected through vcpkg, both copies
+can define the same symbols. This violates the One Definition Rule and can cause runtime errors or undefined behavior.
+The issue might appear only when the two versions differ enough to be incompatible.
 
-Licensing Compliance: Vendored dependencies can obscure the licensing of the embedded libraries, potentially violating their terms or creating compatibility issues.
-
-Increased Maintenance Burden: Keeping vendored dependencies in sync with their upstream versions requires significant manual effort and often leads to duplicated work across packages.
+A vendored dependency is allowed only when it is fully isolated from link domains used by downstream ports and user
+applications. For example, a host-only build tool can contain a statically linked dependency if downstream binaries don't
+link against the tool and the dependency's symbols can't enter their link domains.
 
 ### Prefer using CMake
 
@@ -540,31 +547,44 @@ Conflicting libs are typically by design and not considered a defect.  Because s
 
 ### Installing prebuilt binaries
 
-Ports that install prebuilt (binary-only) artifacts are allowed but strongly discouraged, provided that they don't effectively block changing the versions of other ports. Building from source is preferred because it respects all vcpkg's settings that change compiler or flags.
+Ports that install prebuilt (binary-only) artifacts are allowed but strongly discouraged, provided that the artifacts
+don't prevent users from selecting or updating dependencies through vcpkg. Building from source is preferred because it
+respects vcpkg settings that control the compiler and flags.
 
 We will reject ports that meet all the following conditions:
 
 1. Install prebuilt binaries rather than building from source, and
-2. Those binaries have (or require at runtime) dependencies that are provided by other ports in the curated registry, and
-3. The installed artifacts enter vcpkg's published link domain – i.e. they install libraries/headers/CMake or pkg-config metadata that downstream ports or user projects are expected to link against.
+1. Those binaries incorporate or require at runtime dependencies provided by other ports in the curated registry, and
+1. The installed artifacts expose those dependencies to a link domain that can also contain versions selected through vcpkg.
 
-Rationale: This combination effectively locks the ABI of the dependency graph to the versions used when the upstream prebuilt was produced. vcpkg cannot safely update (for example) `zlib`, `openssl`, or similar dependencies without risking subtle ODR / ABI breakage for consumers linking against the prebuilt library, and users may miss critical security patches.
+This combination effectively locks the dependency graph to the versions used when the upstream prebuilt was produced.
+If vcpkg updates a dependency such as `zlib` or `openssl`, the prebuilt and user-selected versions can define incompatible
+symbols in the same link domain. This can cause One Definition Rule violations, ABI incompatibilities, or missed security
+updates.
 
-"Enters the published link domain" typically means any of:
+An artifact exposes a dependency to a user's link domain when it does any of the following:
+
 * Installing `.lib`, `.a`, `.so`, `.dylib`, or import libraries intended for consumers to link against.
 * Shipping headers that reference (directly or via inline/template code) symbols, types, or macros from other vcpkg ports.
 * Installing CMake config / pkg-config files that invoke `find_dependency()` / `Requires:` on other vcpkg ports.
 
 Allowed (but still discouraged) scenarios:
-* Host-only helper tools (executables) used at build time whose outputs are consumed but which are not themselves linked against by dependent ports, provided they either bundle dependencies privately or only rely on ubiquitous system runtime libraries.
-* Fully self-contained prebuilt libraries that statically link all OSS dependencies AND do not expose their symbols or types through installed headers or exported interfaces (consumers cannot observe or depend on transitive ABI).
+
+* Host-only helper tools used at build time whose outputs are consumed but which aren't linked against by dependent ports,
+  provided that they isolate bundled dependencies or rely only on ubiquitous system runtime libraries.
+* Fully self-contained prebuilt libraries that statically link their dependencies and isolate the dependencies' symbols
+  and types from user link domains, installed headers, and exported interfaces.
 * Data-only, firmware, or asset packages not linked into user code.
 
 Forbidden examples:
+
+* A prebuilt library that statically links a private copy of `zlib` and exposes its symbols to a link domain that can also
+  contain the `zlib` version selected through vcpkg.
 * A prebuilt `libfoo` that installs `lib/libfoo.lib` plus headers including `<zlib.h>` and was compiled against a specific `zlib` version; consumers then link against `libfoo` expecting compatibility.
 * A prebuilt SDK that installs a CMake package file calling `find_dependency(OpenSSL)` while the binary was compiled against an older OpenSSL release.
 
 Mitigations / alternatives:
+
 * Provide a from-source build using upstream scripts or add a thin CMake wrapper.
 * Ask upstream to publish a source-based release or reproducible build instructions; link the upstream issue/PR in a comment in `portfile.cmake` or `vcpkg.json`.
 * Use an [overlay port](../concepts/overlay-ports.md) or a private registry for organization-specific prebuilts that cannot satisfy these rules.
