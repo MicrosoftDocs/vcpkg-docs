@@ -3,8 +3,9 @@ title: vcpkg Maintainer Guide
 description: This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
 author: vicroms
 ms.author: viromer
-ms.date: 2/18/2026
+ms.date: 9/30/2026
 ms.topic: concept-article
+ai-usage: ai-assisted
 ---
 # Maintainer guide
 
@@ -31,8 +32,11 @@ A port must not do any of the following:
 
 Exceptions are made for:
 
-- Ports that replace another one in an official capacity. A successor project.
-- Ports where there is no platform overlap. For example, a Windows-only replacement to a Linux project that doesn't
+- Ports that replace another port in an official capacity. This includes cases where:
+  - The same project publishes a successor component.
+  - Another project takes over maintenance of an abandoned component, including through a fork.
+  - Another project publishes a successor component.
+- Ports where there is no platform overlap. For example, a Windows-only replacement to a Linux component that doesn't
   support Windows.
 - Ports that precede this policy and have a demonstrably significant number of users and contributors.
 
@@ -57,37 +61,37 @@ Existing ports that no longer conform to this policy and aren't temporarily exem
 
 [!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
 
-### Packaged projects should be stable and actively maintained
+### <a name="packaged-projects-should-be-stable-and-actively-maintained"></a> Packaged components should be stable and actively maintained
 
-Projects packaged in the curated registry must be in active maintenance. Ports for inactive projects may be delisted.
+Components packaged in the curated registry must be in active maintenance. Ports for inactive components may be delisted.
 
-A project is considered inactive if:
+A component is considered inactive if:
 
-- Its maintainers have declared the project abandoned.
-- It is archived, or no longer accepting contributions.
+- Its maintainers have declared the component abandoned.
+- Its source repository is archived, or no longer accepting contributions.
 - Maintainers are unresponsive or unreachable.
 - No meaningful changes have been made in a long time.
 
-Exceptions are made for foundational projects that are considered mature and stable and don't receive changes often.
+Exceptions are made for foundational components that are considered mature and stable and don't receive changes often.
 For example: `zlib`.
 
-### Packaged projects should be mature
+### <a name="packaged-projects-should-be-mature"></a> Packaged components should be mature
 
-Projects packaged in the curated registry must be mature and intended for consumption by users of vcpkg. Projects intended
+Components packaged in the curated registry must be mature and intended for consumption by users of vcpkg. Components intended
 for personal use should be [published to custom registries](../produce/publish-to-a-git-registry.md).
 
-A project is considered mature enough for the curated registry, if one of these statements is true:
+A component is considered mature enough for the curated registry, if one of these statements is true:
 
-- The project has a release that is at least six months old.
-- The project demonstrates at least six months of active public development.
-- The project is an official component of another project that satisfies the previous requirements.
+- The component has a release that is at least six months old.
+- The component demonstrates at least six months of active public development.
+- The component is an official part of a project with at least six months of releases or active public development.
   For example, a new Boost library or Qt component.
-- The project demonstrates equivalent maturity to the previous requirements in some other capacity.
+- The component demonstrates equivalent maturity to the previous requirements in some other capacity.
 
-Some indicators of project immaturity are:
+Some indicators of component immaturity are:
 
-- The project doesn't show up in search engines.
-- The project has frequent renames.
+- The component doesn't show up in search engines.
+- The component has frequent renames.
 - Conflicts with other libraries.
 
 [!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
@@ -113,18 +117,18 @@ considered trivial. Trivial changes consume compute time better utilized otherwi
 A port's name should be indicative of its contents.
 
 Searching the port's name in a search engine or specialized package browsers, like [Repology](<https://repology.org>),
-should lead to its corresponding project.
+should lead to its corresponding component.
 
 Ports with short names or named after common words require disambiguation. This applies only to the name of the port in
-the curated registry, the packaged project's name and its contents are not required to conform with this policy.
+the curated registry, the packaged component's name and its contents are not required to conform with this policy.
 
-Exceptions are made for ports that package a project with a strong association to its port's name. For example:  `libpng`,
+Exceptions are made for ports that package a component with a strong association to its port's name. For example:  `libpng`,
 `openssl`, or `zlib`.
 
 To conform with this policy, new ports with ambiguous names can use a prefix, such as:
 
 - The repository's owner, username, or organization. Example: `google-cloud-cpp`.
-  For ports of GitHub projects the GitHub owner is an acceptable unambiguous prefix `<github owner>-<repository name>`.
+  For ports of components hosted on GitHub, the GitHub owner is an acceptable unambiguous prefix `<github owner>-<repository name>`.
 - The name of a suite to which the package belongs to: `boost-dll`.
   Only if the package is an official component of such a suite.
 
@@ -134,9 +138,9 @@ A port with the name `ip` is considered ambiguous because:
 
 - the name is too short,
 - the name is a common word, and
-- the name isn't strongly associated to any singular project.
+- the name isn't strongly associated to any singular component.
 
-To determine if a name is ambiguous, remove the following common prefixes and suffixes used by C++ and open source projects
+To determine if a name is ambiguous, remove the following common prefixes and suffixes used by C++ and open source components
 from the port name:
 
 - `cpp`
@@ -294,7 +298,7 @@ https://github.com/GPUOpen-LibrariesAndSDKs/display-library/blob/master/Public-D
 
 ### Version constraints in ports
 
-Version constraints within ports should generally be avoided, as they can hinder the independent evolution of projects. Adding such constraints is only permissible when there is a well-documented justification, such as proven incompatibility with specific earlier versions. These constraints should not be used merely to maintain parity with independent projects.
+Version constraints within ports should generally be avoided, as they can hinder the independent evolution of components. Adding such constraints is only permissible when there is a well-documented justification, such as proven incompatibility with specific earlier versions. These constraints should not be used merely to maintain parity with independent components.
 
 ### Variables in `MAYBE_UNUSED_VARIABLES` must apply to at least one configuration
 
@@ -623,18 +627,46 @@ vcpkg is a packaging solution, not the ultimate owners of the components that we
   * we are incapable of maintaining across upstream version updates
   * are large enough to cause license entanglement with the vcpkg repository itself
 
-### Notify upstream owners for upstream relevant patches
+### <a name="notify-upstream-owners-for-upstream-relevant-patches"></a> Upstream notification and waiting periods
 
-If a patch could possibly be useful by upstream, upstream must be notified of the patch's content. (Patches that apply vcpkg-specific behavior unrelated to upstream, such as devendoring a dependency, don't require notification.)
+Upstream owners are the final arbiters of their component's behavior. vcpkg maintainers require upstream notification
+for upstream-relevant patches and for bugs identified by AI code review tools in new port submissions.
 
-To avoid situations where upstream disagrees with the patch, we will wait at least 30 days to apply such patches.
+#### Upstream-relevant patches
 
-We will skip this waiting period if we have high confidence that the change is correct. Examples of high confidence patches include, but are not limited to:
+If a patch could possibly be useful by upstream, vcpkg maintainers require upstream to be notified of the patch's content.
+Patches that apply vcpkg-specific behavior unrelated to upstream, such as devendoring a dependency, don't require notification.
+
+To avoid situations where upstream disagrees with the patch, vcpkg maintainers wait at least 30 days after upstream
+notification before applying such patches.
+
+vcpkg maintainers skip this waiting period if they have high confidence that the change is correct. Examples of high
+confidence patches include, but are not limited to:
 
 * Upstream's acceptance as a patch (for example, backporting a specific change from a pull request upstream has merged).
 * Adding missing `#include`s.
 * Small and obvious product code fixes (for example, initializing an uninitialized variable).
 * Disabling irrelevant-in-vcpkg components of the build such as tests or examples.
+
+#### AI-identified bugs in new ports
+
+The curated registry aims to avoid shipping known exploitable code, but vcpkg maintainers can't comprehensively audit
+every component's source code. AI code review findings aren't, by themselves, a final determination that upstream code
+is vulnerable.
+
+When AI code review tools identify a bug during review of a new port submission, vcpkg maintainers require the bug to
+be reported to upstream, following the project's security reporting process for potentially exploitable bugs. This
+requirement applies even when the finding concerns upstream code that the port doesn't patch.
+
+- If upstream determines that the reported behavior isn't a bug, vcpkg maintainers accept that determination as final
+  and don't reject the new port submission on the basis of that finding.
+- If upstream fixes the bug, vcpkg maintainers accept the fixed version or an upstream-approved patch, subject to the
+  patching policy and the other requirements for new ports.
+- If upstream doesn't respond within 30 days after the bug is reported, vcpkg maintainers default to treating the AI
+  finding as an exploitable problem and close the new port submission.
+
+The high-confidence exceptions to the patch waiting period don't waive this bug-reporting requirement or the need
+for an upstream response.
 
 ### Prefer options over patching
 
