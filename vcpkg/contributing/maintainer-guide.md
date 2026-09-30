@@ -1,8 +1,8 @@
 ---
 title: vcpkg Maintainer Guide
 description: This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
-author: vicroms
-ms.author: viromer
+author: BillyONeal
+ms.author: bion
 ms.date: 9/30/2026
 ms.topic: concept-article
 ai-usage: ai-assisted
