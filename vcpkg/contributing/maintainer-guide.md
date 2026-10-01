@@ -555,20 +555,23 @@ vcpkg_cmake_configure(
 
 ### Place conflicting libs in a `manual-link` directory
 
-A `.lib` file is considered conflicting if it does any of the following:
+A linker input file installed in `lib` or `debug/lib`, such as a `.lib`, `.a`, `.so`, or `.dylib` file, is considered
+conflicting if it does any of the following:
 
 - Defines `main`.
 - Defines `malloc`.
 - Defines symbols that are also defined in other libraries.
 
-Some `.lib` files intentionally provide narrowly scoped replacements for symbols that consumers would otherwise define or
-obtain elsewhere. For example, Google Test's `gtest-main.lib` provides `main` for test executables whose authors choose
-to use it instead of defining their own entry point.
+Some linker input files intentionally provide narrowly scoped replacements for symbols that consumers would otherwise
+define or obtain elsewhere. For example, Google Test's `gtest-main.lib` provides `main` for test executables whose authors
+choose to use it instead of defining their own entry point.
 
-Place these files in a `manual-link` subdirectory of the library directory so build systems that link every `.lib` file
-in that directory don't select them automatically. Consumers must explicitly opt in to linking them and are responsible
-for avoiding conflicting definitions. This exception isn't a general mechanism for packaging alternative providers of
-another component, and moving a `.lib` file into `manual-link` doesn't isolate its symbols from the consumer's link domain.
+Place conflicting linker input files in `lib/manual-link` or `debug/lib/manual-link` so build systems that automatically
+link files from the library directory don't select them. Windows DLLs remain in `bin` or `debug/bin`; place their import
+libraries in `manual-link` when explicit linking is required. Consumers must explicitly opt in to linking these files and
+are responsible for avoiding conflicting definitions. This exception isn't a general mechanism for packaging alternative
+providers of another component, and moving a linker input file into `manual-link` doesn't isolate its symbols from the
+consumer's link domain.
 
 ### Installing prebuilt binaries
 
