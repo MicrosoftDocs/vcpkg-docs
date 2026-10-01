@@ -623,7 +623,7 @@ When creating a new port, follow the versioning convention used by the package a
 
 If upstream has not published a release in a while, do not change the port's versioning scheme to `version-date` in order to get the latest changes. These commits may include changes that are not production ready. Instead ask the upstream repository to publish a new release.
 
-### Update the `"port-version"` field for every modified port
+### <a name="update-the-port-version-field-in-the-manifest-file-of-any-modified-ports"></a> Update the `"port-version"` field for every modified port
 
 Each PR that modifies a port must produce a new version of that port. PRs are squash-merged, so update each modified
 port's version once per PR, not once per commit or review revision.
@@ -639,7 +639,7 @@ For Example:
 
 See the [versioning documentation](../users/versioning.md#port-version) for more information.
 
-### Update the version files in `versions/` for every modified port
+### <a name="update-the-version-files-in-versions-of-any-modified-ports"></a> Update the version files in `versions/` for every modified port
 
 vcpkg uses a set of metadata files to power its versioning feature.
 These files are located in the following locations:
