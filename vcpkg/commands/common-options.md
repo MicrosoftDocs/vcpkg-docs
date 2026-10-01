@@ -15,6 +15,25 @@ Most vcpkg commands accept a group of common options that control cross-cutting 
 
 Specify the cache configuration for [Asset Caching](../users/assetcaching.md).
 
+### <a name="binary-cache-compression-level"></a> `--binary-cache-compression-level=<0-9>`
+
+Sets the compression level for binary-cache ZIP archives. The value must be a single digit from `0` to `9`:
+`0` stores files without compression, `1` requests the fastest compression, and `9` requests maximum compression.
+Intermediate levels trade compression time for archive size; exact results depend on the archive tool.
+
+This option takes precedence over the
+[`VCPKG_BINARY_CACHE_COMPRESSION_LEVEL`](../users/config-environment.md#vcpkg_binary_cache_compression_level)
+environment variable. When neither setting is supplied, vcpkg uses the archive tool's default compression level.
+Invalid values, including an empty value, are rejected when initializing the binary cache.
+
+```console
+vcpkg install zlib --binary-cache-compression-level=1
+```
+
+The setting applies to all [binary-cache providers](../users/binarycaching.md) that use vcpkg's ZIP creation.
+NuGet packaging is unaffected. Changing the compression level does not change package ABI hashes or invalidate
+existing cache entries.
+
 ### <a name="binarysource"></a> `--binarysource=<config>`
 
 Add a source for [Binary Caching](../users/binarycaching.md).
