@@ -656,7 +656,8 @@ For example, for `zlib` the relevant files are:
 - `${VCPKG_ROOT}/versions/z-/zlib.json`
 
 For each modified port in a PR, update its version files to record the final Git tree. If you make further changes during
-review, refresh the version entry to match those changes without incrementing `"port-version"` again.
+review, run `vcpkg x-add-version <port-name> --overwrite-version` to refresh the unmerged version entry
+without incrementing `"port-version"` again.
 
 **The recommended method to update these files is to run the `x-add-version` command, e.g.:**
 
