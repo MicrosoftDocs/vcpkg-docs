@@ -210,6 +210,15 @@ in a solution which uses manifest mode and uses multiple triplets.
 
 In manifest mode, this defaults to `$(VcpkgManifestRoot)\vcpkg_installed\$(VcpkgTriplet)\`. In
 classic mode, this defaults to `$(VcpkgRoot)\installed\`.
+Use [`VcpkgInstalledDirRoot`](#vcpkginstalleddirroot) to change the default location in manifest mode.
+
+### <a name="vcpkginstalleddirroot"></a> `VcpkgInstalledDirRoot` (Installed Directory Root)
+
+This property defines the installation directory for libraries when using manifest mode.
+Subdirectories are created as needed for each triplet. This property is ignored when `VcpkgInstalledDir` is explicitly defined.
+
+The installed directory is derived as `$(VcpkgInstalledDirRoot)\$(VcpkgTriplet)`. `VcpkgInstalledDirRoot`
+defaults to `$(VcpkgManifestRoot)\vcpkg_installed\`.
 
 ### <a name="vcpkgmanifestinstalledbasedir"></a> `VcpkgManifestInstalledBaseDir` (Installed Base Directory)
 
@@ -245,6 +254,7 @@ reload the IDE to see the vcpkg Property Page.
 vcpkg will run during your project's build and install any listed dependencies to
 `vcpkg_installed/$(VcpkgTriplet)/` adjacent to the `vcpkg.json` file; these libraries will then
 automatically be included in and linked to your MSBuild projects.
+You can use the [`VcpkgInstalledDirRoot`](#vcpkginstalleddirroot) property to change this directory.
 
 ### Known issues
 
