@@ -96,7 +96,7 @@ backend to work and should be run before any task that involves vcpkg.
 
 ```yml
 - name: Enable GitHub Actions Cache backend
-  uses: actions/github-script@v7
+  uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
   with:
   script: |
     core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
@@ -177,7 +177,7 @@ steps to install vcpkg.
 
 ```yml
 steps:
-- uses: actions/checkout@v4
+- uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
   with:
     repository: "https://github.com/Microsoft/vcpkg"
     path: "vcpkg"
@@ -234,10 +234,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
     
     - name: Acquire vcpkg
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       with:
         repository: "Microsoft/vcpkg"
         path: vcpkg
@@ -247,7 +247,7 @@ jobs:
       shell: bash
 
     - name: Enable GitHub Actions Cache backend
-      uses: actions/github-script@v7
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
       with:
         script: |
           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
