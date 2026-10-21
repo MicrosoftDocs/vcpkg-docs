@@ -1,7 +1,7 @@
 ---
 title: vcpkg.json Reference
 description: Reference documentation for the vcpkg.json file format.
-ms.date: 7/16/2024
+ms.date: 9/16/2026
 ms.topic: reference
 ---
 # vcpkg.json Reference
@@ -491,13 +491,21 @@ The following identifiers are defined based on the [triplet settings](../users/t
 | `windows` | `VCPKG_CMAKE_SYSTEM_NAME` == `""` or</br> `VCPKG_CMAKE_SYSTEM_NAME` == `"WindowsStore"` or</br> `VCPKG_CMAKE_SYSTEM_NAME` == `"MinGW"` |
 | `mingw` | `VCPKG_CMAKE_SYSTEM_NAME` == `"MinGW"` |
 | `uwp` | `VCPKG_CMAKE_SYSTEM_NAME` == `"WindowsStore"` |
-| `xbox` | `VCPKG_CMAKE_SYSTEM_NAME` == `""` and</br> `XBOX_CONSOLE_TARGET` is defined. |
+| `xbox` | `VCPKG_CMAKE_SYSTEM_NAME` == `""` and</br> `VCPKG_XBOX_CONSOLE_TARGET` is defined and isn't empty. |
 | `linux` | `VCPKG_CMAKE_SYSTEM_NAME` == `"Linux"` |
+| `android` | `VCPKG_CMAKE_SYSTEM_NAME` == `"Android"` |
+| `ohos` | `VCPKG_CMAKE_SYSTEM_NAME` == `"OHOS"` |
+| `apple` | `VCPKG_CMAKE_SYSTEM_NAME` == `"Darwin"`, `"iOS"`, `"tvOS"`, `"watchOS"`, or `"visionOS"` |
 | `osx` | `VCPKG_CMAKE_SYSTEM_NAME` == `"Darwin"` |
 | `ios` | `VCPKG_CMAKE_SYSTEM_NAME` == `"iOS"` |
+| `tvos` | `VCPKG_CMAKE_SYSTEM_NAME` == `"tvOS"` |
+| `watchos` | `VCPKG_CMAKE_SYSTEM_NAME` == `"watchOS"` |
+| `visionos` | `VCPKG_CMAKE_SYSTEM_NAME` == `"visionOS"` |
+| `bsd` | `VCPKG_CMAKE_SYSTEM_NAME` == `"FreeBSD"`, `"OpenBSD"`, or `"NetBSD"` |
 | `freebsd` | `VCPKG_CMAKE_SYSTEM_NAME` == `"FreeBSD"` |
 | `openbsd` | `VCPKG_CMAKE_SYSTEM_NAME` == `"OpenBSD"` |
-| `android` | `VCPKG_CMAKE_SYSTEM_NAME` == `"Android"` |
+| `netbsd` | `VCPKG_CMAKE_SYSTEM_NAME` == `"NetBSD"` |
+| `solaris` | `VCPKG_CMAKE_SYSTEM_NAME` == `"SunOS"` |
 | `emscripten` | `VCPKG_CMAKE_SYSTEM_NAME` == `"Emscripten"` |
 | `qnx` | `VCPKG_CMAKE_SYSTEM_NAME` == `"QNX"` |
 | `vxworks` | `VCPKG_CMAKE_SYSTEM_NAME` == `"VxWorks"` |

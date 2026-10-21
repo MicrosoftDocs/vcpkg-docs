@@ -291,6 +291,9 @@ $ vcpkg fetch nuget
 
 Non-Windows users will need to call this through mono via `mono /path/to/nuget.exe sources add ...`.
 
+> [!NOTE]
+> NuGet configuration files are hierarchical. If a repository-level `nuget.config` contains `<clear />` under `<packageSources>`, it can remove package sources inherited from the user-level configuration. This may cause an authenticated binary cache configured with `nuget sources add` to become unavailable to vcpkg, resulting in authentication failures such as `401 (Unauthorized)` even though adding the source itself succeeded. Make sure the binary-cache source remains present in the effective NuGet configuration, either by removing an unnecessary `<clear />` or by explicitly adding the authenticated source to the applicable `nuget.config`.
+
 ### `metadata.repository`
 
 The `nuget` and `nugetconfig` source providers respect certain environment variables while generating nuget packages. The `metadata.repository` field of any packages will be generated as:

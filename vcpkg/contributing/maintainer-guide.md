@@ -1,10 +1,11 @@
 ---
 title: vcpkg Maintainer Guide
 description: This document describes policies, guidelines, and best practices to follow when making contributions to vcpkg.
-author: vicroms
-ms.author: viromer
-ms.date: 2/18/2026
+author: BillyONeal
+ms.author: bion
+ms.date: 9/30/2026
 ms.topic: concept-article
+ai-usage: ai-assisted
 ---
 # Maintainer guide
 
@@ -26,15 +27,23 @@ The entire combination of ports is tested regularly by vcpkg's automated CI.
 A port must not do any of the following:
 
 - [Install files that conflict with another port.](#unique-port-attribution-rule)
-- Install symbols and definitions owned by another package.
+- Install symbols and definitions owned by another package, except for narrowly scoped, explicitly linked libraries
+  described in [Place conflicting libs in a `manual-link` directory](#place-conflicting-libs-in-a-manual-link-directory).
 - Test for the presence or absence of another port. Except for declaring a dependency.
 
 Exceptions are made for:
 
-- Ports that replace another one in an official capacity. A successor project.
-- Ports where there is no platform overlap. For example, a Windows-only replacement to a Linux project that doesn't
+- Ports that replace another port in an official capacity. This includes cases where:
+  - The same project publishes a successor component.
+  - Another project takes over maintenance of an abandoned component, including through a fork.
+  - Another project publishes a successor component.
+- Ports where there is no platform overlap. For example, a Windows-only replacement to a Linux component that doesn't
   support Windows.
 - Ports that precede this policy and have a demonstrably significant number of users and contributors.
+
+vcpkg maintainers assess grandfathering exceptions case by case. For example, `boringssl` was added before custom
+registries were available and remains in the curated registry because it still has meaningful users, even though
+`openssl` is the canonical provider for the OpenSSL fork family. Prior acceptance alone doesn't guarantee an exception.
 
 Ports that don't conform to this policy can't be accepted into the curated registry.
 
@@ -53,41 +62,43 @@ Exceptions are made for:
 - Ports that precede this policy and have a demonstrably significant number of users and contributors.
 
 New ports that can't be tested in at least one official triplet aren't accepted into the curated registry.
-Existing ports that no longer conform to this policy and aren't temporarily exempted are delisted from the registry.
+Existing ports that no longer conform to this policy and don't qualify for an exception listed above are delisted from
+the registry. For example, if CI testing has been disabled on every official triplet a port supported, and no exception
+applies, the port is delisted.
 
 [!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
 
-### Packaged projects should be stable and actively maintained
+### <a name="packaged-projects-should-be-stable-and-actively-maintained"></a> Packaged components should be stable and actively maintained
 
-Projects packaged in the curated registry must be in active maintenance. Ports for inactive projects may be delisted.
+Components packaged in the curated registry must be in active maintenance. Ports for inactive components may be delisted.
 
-A project is considered inactive if:
+A component is considered inactive if:
 
-- Its maintainers have declared the project abandoned.
-- It is archived, or no longer accepting contributions.
+- Its maintainers have declared the component abandoned.
+- Its source repository is archived, or no longer accepting contributions.
 - Maintainers are unresponsive or unreachable.
 - No meaningful changes have been made in a long time.
 
-Exceptions are made for foundational projects that are considered mature and stable and don't receive changes often.
+Exceptions are made for foundational components that are considered mature and stable and don't receive changes often.
 For example: `zlib`.
 
-### Packaged projects should be mature
+### <a name="packaged-projects-should-be-mature"></a> Packaged components should be mature
 
-Projects packaged in the curated registry must be mature and intended for consumption by users of vcpkg. Projects intended
+Components packaged in the curated registry must be mature and intended for consumption by users of vcpkg. Components intended
 for personal use should be [published to custom registries](../produce/publish-to-a-git-registry.md).
 
-A project is considered mature enough for the curated registry, if one of these statements is true:
+A component is considered mature enough for the curated registry, if one of these statements is true:
 
-- The project has a release that is at least six months old.
-- The project demonstrates at least six months of active public development.
-- The project is an official component of another project that satisfies the previous requirements.
+- The component has a release that is at least six months old.
+- The component demonstrates at least six months of active public development.
+- The component is an official part of a project with at least six months of releases or active public development.
   For example, a new Boost library or Qt component.
-- The project demonstrates equivalent maturity to the previous requirements in some other capacity.
+- The component demonstrates equivalent maturity to the previous requirements in some other capacity.
 
-Some indicators of project immaturity are:
+Some indicators of component immaturity are:
 
-- The project doesn't show up in search engines.
-- The project has frequent renames.
+- The component doesn't show up in search engines.
+- The component has frequent renames.
 - Conflicts with other libraries.
 
 [!INCLUDE [registry-or-overlay](../../includes/registry-or-overlay.md)]
@@ -102,10 +113,12 @@ the wait times for Continuous Integration (CI) results.
 Limiting PRs to a single port may not be possible in some cases. For example, when changing a port requires downstream
 consumers to be updated or patched.
 
-### Avoid trivial changes in untouched files
+### <a name="avoid-trivial-changes-in-untouched-files"></a> Avoid unrelated cosmetic changes
 
-Don't make trivial changes to an otherwise unmodified port, such as: reformatting, renaming variables, or fixing typos. Any change that doesn't affect the output of a port's installation is
-considered trivial. Trivial changes consume compute time better utilized otherwise.
+Don't make unrelated cosmetic changes to an otherwise unmodified port, such as reformatting, renaming variables, or
+fixing typos. These changes consume compute time better used elsewhere. Changes that improve build correctness,
+compatibility, reliability, or reproducibility aren't considered trivial solely because the installed files remain
+unchanged.
 
 <!-- The <a> tag is required to preserve old external links that use the previous header text-->
 ### <a name="check-names-against-other-repositories"></a> Use distinctive port names
@@ -113,18 +126,18 @@ considered trivial. Trivial changes consume compute time better utilized otherwi
 A port's name should be indicative of its contents.
 
 Searching the port's name in a search engine or specialized package browsers, like [Repology](<https://repology.org>),
-should lead to its corresponding project.
+should lead to its corresponding component.
 
 Ports with short names or named after common words require disambiguation. This applies only to the name of the port in
-the curated registry, the packaged project's name and its contents are not required to conform with this policy.
+the curated registry, the packaged component's name and its contents are not required to conform with this policy.
 
-Exceptions are made for ports that package a project with a strong association to its port's name. For example:  `libpng`,
+Exceptions are made for ports that package a component with a strong association to its port's name. For example:  `libpng`,
 `openssl`, or `zlib`.
 
 To conform with this policy, new ports with ambiguous names can use a prefix, such as:
 
 - The repository's owner, username, or organization. Example: `google-cloud-cpp`.
-  For ports of GitHub projects the GitHub owner is an acceptable unambiguous prefix `<github owner>-<repository name>`.
+  For ports of components hosted on GitHub, the GitHub owner is an acceptable unambiguous prefix `<github owner>-<repository name>`.
 - The name of a suite to which the package belongs to: `boost-dll`.
   Only if the package is an official component of such a suite.
 
@@ -134,9 +147,9 @@ A port with the name `ip` is considered ambiguous because:
 
 - the name is too short,
 - the name is a common word, and
-- the name isn't strongly associated to any singular project.
+- the name isn't strongly associated to any singular component.
 
-To determine if a name is ambiguous, remove the following common prefixes and suffixes used by C++ and open source projects
+To determine if a name is ambiguous, remove the following common prefixes and suffixes used by C++ and open source components
 from the port name:
 
 - `cpp`
@@ -149,7 +162,7 @@ For example: `ip-cpp`, `libip` and `ip5`, are ambiguous because they are reduced
 
 ### Limit port renames
 
-To avoid confusion for users, ports cannot be renamed until after one year of their last rename.
+To avoid confusion for users, a port must not be renamed more than once in any 12-month period.
 
 ### Use GitHub draft PRs
 
@@ -158,16 +171,14 @@ Most new PRs should be opened as drafts and converted to normal PRs once the CI 
 
 For more information about GitHub Draft PRs, see [Introducing draft pull requests](https://github.blog/2019-02-14-introducing-draft-pull-requests/).
 
-The vcpkg team may convert your PR to draft during the review process. Usually, with a request to make changes
-to your code or comments indicating when to mark the PR as Ready for Review.
+A vcpkg maintainer may convert your PR to draft during the review process, usually when requesting changes or leaving
+comments that indicate when to mark the PR as ready for review.
 
 #### Close inactive PRs
 
-The vcpkg team may close pull requests (PRs) that have no activity for more than 60 days.
-
-For pull requests in a reviewable state, the countdown begins from the last time a vcpkg maintainer makes a request for
-changes, or asks for clarification. If no activity is made by the contributor within 60 days, the PR is considered stale
-and may be closed at the team's discretion.
+A vcpkg maintainer may close a PR after it has been waiting for action from the contributor for more than
+60 days. The inactivity countdown runs only while contributor action is required. It doesn't run while the PR is waiting
+for build lab verification, or review by a vcpkg maintainer.
 
 A PR is in a reviewable state when it:
 
@@ -175,7 +186,14 @@ A PR is in a reviewable state when it:
 - Doesn't have any pending requested changes or clarifications from a vcpkg maintainer.
 - Doesn't have merge conflicts.
 
-PRs inactive for more than 60 days and not in reviewable state, may be closed without a review.
+The countdown begins when the PR enters a state that requires contributor action. This can happen when a PR is opened
+with problems the contributor needs to address, or when a vcpkg maintainer requests changes or clarification. A vcpkg
+maintainer may mark the PR as a draft when requesting contributor action.
+
+A substantive response from the contributor resets the countdown. If the response resolves all pending requests and the
+PR is ready for review, the countdown stops until contributor action is required again. If the contributor doesn't
+respond within 60 days while action is required, the PR is considered stale and may be closed at a vcpkg maintainer's
+discretion.
 
 ## Portfiles
 
@@ -249,7 +267,7 @@ the files installed by `b` must be the same, regardless of influence by the prev
 
 ### Unique port attribution rule
 
-In the entire vcpkg system, no two ports a user is expected to use concurrently may provide the same file. If a port tries to install a file already provided by another file, installation will fail. If a port wants to use an extremely common name for a header, for example, it should place those headers in a subdirectory rather than in `include`.
+In the entire vcpkg system, no two ports a user is expected to use concurrently may provide the same file. If a port tries to install a file already provided by another port, installation will fail. If a port wants to use an extremely common name for a header, for example, it should place those headers in a subdirectory rather than in `include`.
 
 This property is checked regularly by continuous integration runs which try to install all ports in the registry, which will fail with `FILE_CONFLICTS` if two ports provide the same file.
 
@@ -294,14 +312,14 @@ https://github.com/GPUOpen-LibrariesAndSDKs/display-library/blob/master/Public-D
 
 ### Version constraints in ports
 
-Version constraints within ports should generally be avoided, as they can hinder the independent evolution of projects. Adding such constraints is only permissible when there is a well-documented justification, such as proven incompatibility with specific earlier versions. These constraints should not be used merely to maintain parity with independent projects.
+Version constraints within ports should generally be avoided, as they can hinder the independent evolution of components. Adding such constraints is only permissible when there is a well-documented justification, such as proven incompatibility with specific earlier versions. These constraints should not be used merely to maintain parity with independent components.
 
 ### Variables in `MAYBE_UNUSED_VARIABLES` must apply to at least one configuration
 
 When adding a new variable to [`MAYBE_UNUSED_VARIABLES`](../maintainers/functions/vcpkg_cmake_configure.md#maybe_unused_variables)
 to silence a warning during the CMake configuration step, you must add a comment explaining the case when the new variable
 applies. If a variable does not apply in any configuration, then it is very likely that an underlying bug exists (for example,
-a  misspeled variable name) and adding it has no actual effect on the build.
+a misspelled variable name) and adding it has no actual effect on the build.
 
 ```cmake
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
@@ -309,13 +327,12 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     windowsfeature WINDOWS_OPTION
 )
 
-vcpkg_configure_cmake(
+vcpkg_cmake_configure(
   SOURCE_PATH "${SOURCE_PATH}"
   OPTIONS
     ${FEATURE_OPTIONS}
   MAYBE_UNUSED_VARIABLES
-    # Applies only on Windows
-    WINDOWS_OPTION
+    WINDOWS_OPTION # Applies only on Windows
 )
 ```
 
@@ -352,13 +369,23 @@ Examples:
 
 Default features are intended to ensure that a reasonably functional build of a library gets installed for customers who don't know they are using it. If they don't know they are using a library, they can't know to list features. For example, `libarchive` exposes features that enable compression algorithms to an existing generic interface; if built without any of such features, the library may have no utility.
 
-One must carefully consider whether a feature should be on by default, because disabling default features is complex.
+Here, customers include both user projects that consume the package graph and downstream ports within that graph.
+Both express their dependency requirements through the same feature interface.
 
-Disabling a default feature as a 'transitive' consumer requires:
-* All customers explicitly disabling default features via [`"default-features": false`](../reference/vcpkg-json.md#dependency-default-features) or including `[core]` in the feature list on the command line.
-* Naming the transitive dependency on the `vcpkg install` command line, or as a direct dependency in the top level manifest
+Carefully consider whether a feature should be on by default, because disabling default features is complex.
 
-In vcpkg's curated registry, if the feature adds additional APIs, executables, or other binaries, it must be off by default. If in doubt, do not mark a feature as default.
+To disable default features for a transitive dependency:
+
+* Every customer that depends on the port must disable its default features in its dependency declaration using
+  [`"default-features": false`](../reference/vcpkg-json.md#dependency-default-features).
+* The top-level project must also name the transitive dependency directly, either in its manifest with
+  `"default-features": false`, or on the `vcpkg install` command line with `[core]`.
+
+Disabling default features doesn't prevent another customer from explicitly requesting any of those features.
+
+For this policy, an API is any interface exposed to consumers, including library interfaces, executable command-line interfaces, and other binary interfaces. A feature may be enabled by default when it adds behavior behind an existing API, such as support for additional compression algorithms through an existing generic interface.
+
+In vcpkg's curated registry, if a feature adds an API, it must be off by default. If in doubt, do not mark a feature as default.
  
 
 ### Do not use features to control alternatives in published interfaces
@@ -397,23 +424,30 @@ message(STATUS "See the overlay ports documentation at https://github.com/micros
 
 ### Do not use vendored dependencies
 
-Do not use embedded copies of libraries.
-All dependencies should be split out and packaged separately so they can be updated and maintained.
+Prefer to package dependencies separately so users can select and update them through vcpkg. Vendored dependencies
+introduce several challenges:
 
-Vendored dependencies introduce several challenges that conflict with vcpkg’s goals of providing a reliable, consistent, and maintainable package management system:
+- **Difficulty updating:** Vendored dependencies are harder to track and update, including when applying security fixes.
+- **Symbol conflicts:** A vendored dependency can define the same symbols as another version of the dependency, causing
+  runtime errors or undefined behavior.
+- **Licensing compliance:** Vendored dependencies can obscure licensing requirements or create license compatibility
+  issues.
+- **Increased maintenance:** Keeping vendored dependencies synchronized with their upstream versions increases maintenance
+  work and can duplicate work across ports.
 
-Difficulty in Updates: Embedded copies of libraries make it harder to track and apply updates, including security patches, from the upstream projects. This leads to potential security risks and outdated dependencies in the ecosystem.
+For these reasons, devendor dependencies whenever practical. Vendored dependencies must not be exposed to a user's link
+domain.
 
-Symbol Conflicts: Vendored dependencies can cause symbol conflicts when multiple packages include different versions of the same library. 
-  
-  For example:
-  If Package A vendors Library X (version 1) and Package B vendors Library X (version 2), an application linking both packages may experience runtime errors or undefined behavior due to conflicting symbols.
+A link domain is the set of symbols that can resolve against one another at runtime. On Windows, each DLL generally has
+its own link domain. On platforms with a process-wide symbol table, the link domain generally includes the entire process.
 
-By packaging dependencies separately, vcpkg ensures a single version of a library is used across all packages, eliminating such conflicts.
+If a component exposes a vendored dependency to the same link domain as a dependency selected through vcpkg, both copies
+can define the same symbols. This violates the One Definition Rule and can cause runtime errors or undefined behavior.
+The issue might appear only when the two versions differ enough to be incompatible.
 
-Licensing Compliance: Vendored dependencies can obscure the licensing of the embedded libraries, potentially violating their terms or creating compatibility issues.
-
-Increased Maintenance Burden: Keeping vendored dependencies in sync with their upstream versions requires significant manual effort and often leads to duplicated work across packages.
+A vendored dependency is allowed only when it is fully isolated from link domains used by downstream ports and user
+applications. For example, a host-only build tool can contain a statically linked dependency if downstream binaries don't
+link against the tool and the dependency's symbols can't enter their link domains.
 
 ### Prefer using CMake
 
@@ -461,7 +495,7 @@ install(EXPORT ContosoTargets
   DESTINATION share/contoso)
 ```
 
-Only the `install(TARGETS)` line needs to be patched.
+Replace the `install(TARGETS)` line with a conditional block that also excludes the unwanted target from the default build:
 ```cmake
 add_library(contoso SHARED contoso.c)
 add_library(contoso_static STATIC contoso.c)
@@ -521,41 +555,65 @@ vcpkg_cmake_configure(
 
 ### Place conflicting libs in a `manual-link` directory
 
-A lib is considered conflicting if it does any of the following:
+A linker input file installed in `lib` or `debug/lib`, such as a `.lib`, `.a`, `.so`, or `.dylib` file, is considered
+conflicting if it does any of the following:
 
-- Define `main`
-- Define malloc
-- Define symbols that are also declared in other libraries
+- Defines `main`.
+- Defines `malloc`.
+- Defines symbols that are also defined in other libraries.
 
-Conflicting libs are typically by design and not considered a defect.  Because some build systems link against everything in the lib directory, these should be moved into a subdirectory named `manual-link`.
+Some linker input files intentionally provide narrowly scoped replacements for symbols that consumers would otherwise
+define or obtain elsewhere. For example, Google Test's `gtest-main.lib` provides `main` for test executables whose authors
+choose to use it instead of defining their own entry point.
+
+Place conflicting linker input files in `lib/manual-link` or `debug/lib/manual-link` so build systems that automatically
+link files from the library directory don't select them. Windows DLLs remain in `bin` or `debug/bin`; place their import
+libraries in `manual-link` when explicit linking is required. Consumers must explicitly opt in to linking these files and
+are responsible for avoiding conflicting definitions. This exception isn't a general mechanism for packaging alternative
+providers of another component, and moving a linker input file into `manual-link` doesn't isolate its symbols from the
+consumer's link domain.
 
 ### Installing prebuilt binaries
 
-Ports that install prebuilt (binary-only) artifacts are allowed but strongly discouraged, provided that they don't effectively block changing the versions of other ports. Building from source is preferred because it respects all vcpkg's settings that change compiler or flags.
+Ports that install prebuilt (binary-only) artifacts are allowed but strongly discouraged, provided that the artifacts
+don't prevent users from selecting or updating dependencies through vcpkg. Building from source is preferred because it
+respects vcpkg settings that control the compiler and flags.
 
 We will reject ports that meet all the following conditions:
 
 1. Install prebuilt binaries rather than building from source, and
-2. Those binaries have (or require at runtime) dependencies that are provided by other ports in the curated registry, and
-3. The installed artifacts enter vcpkg's published link domain – i.e. they install libraries/headers/CMake or pkg-config metadata that downstream ports or user projects are expected to link against.
+1. Those binaries incorporate or require at runtime dependencies provided by other ports in the curated registry, and
+1. The installed artifacts expose those dependencies to a link domain that can also contain versions selected through vcpkg.
 
-Rationale: This combination effectively locks the ABI of the dependency graph to the versions used when the upstream prebuilt was produced. vcpkg cannot safely update (for example) `zlib`, `openssl`, or similar dependencies without risking subtle ODR / ABI breakage for consumers linking against the prebuilt library, and users may miss critical security patches.
+This combination effectively locks the dependency graph to the versions used when the upstream prebuilt was produced.
+If vcpkg updates a dependency such as `zlib` or `openssl`, the prebuilt and user-selected versions can define incompatible
+symbols in the same link domain. This can cause One Definition Rule violations, ABI incompatibilities, or missed security
+updates.
 
-"Enters the published link domain" typically means any of:
-* Installing `.lib`, `.a`, `.so`, `.dylib`, or import libraries intended for consumers to link against.
-* Shipping headers that reference (directly or via inline/template code) symbols, types, or macros from other vcpkg ports.
-* Installing CMake config / pkg-config files that invoke `find_dependency()` / `Requires:` on other vcpkg ports.
+An artifact exposes a dependency whenever that dependency participates in a user's link domain, regardless of whether
+upstream intends to expose it. This includes:
+
+* Consumer-linkable `.lib`, `.a`, `.so`, `.dylib`, or import libraries that bring the dependency into the user's link domain.
+* Installed headers that reference (directly or via inline/template code) symbols, types, or macros from other vcpkg ports.
+* Installed CMake config or pkg-config files that invoke `find_dependency()` or `Requires:` on other vcpkg ports.
 
 Allowed (but still discouraged) scenarios:
-* Host-only helper tools (executables) used at build time whose outputs are consumed but which are not themselves linked against by dependent ports, provided they either bundle dependencies privately or only rely on ubiquitous system runtime libraries.
-* Fully self-contained prebuilt libraries that statically link all OSS dependencies AND do not expose their symbols or types through installed headers or exported interfaces (consumers cannot observe or depend on transitive ABI).
+
+* Host-only helper tools used at build time whose outputs are consumed but which aren't linked against by dependent ports,
+  provided that they isolate bundled dependencies or rely only on ubiquitous system runtime libraries.
+* Prebuilt libraries whose bundled dependencies remain entirely in separate link domains and don't appear in installed
+  headers or exported interfaces. Static linking alone doesn't isolate a dependency from a user's link domain.
 * Data-only, firmware, or asset packages not linked into user code.
 
 Forbidden examples:
+
+* A prebuilt library that statically links a private copy of `zlib` and exposes its symbols to a link domain that can also
+  contain the `zlib` version selected through vcpkg.
 * A prebuilt `libfoo` that installs `lib/libfoo.lib` plus headers including `<zlib.h>` and was compiled against a specific `zlib` version; consumers then link against `libfoo` expecting compatibility.
 * A prebuilt SDK that installs a CMake package file calling `find_dependency(OpenSSL)` while the binary was compiled against an older OpenSSL release.
 
 Mitigations / alternatives:
+
 * Provide a from-source build using upstream scripts or add a thin CMake wrapper.
 * Ask upstream to publish a source-based release or reproducible build instructions; link the upstream issue/PR in a comment in `portfile.cmake` or `vcpkg.json`.
 * Use an [overlay port](../concepts/overlay-ports.md) or a private registry for organization-specific prebuilts that cannot satisfy these rules.
@@ -568,11 +626,13 @@ When creating a new port, follow the versioning convention used by the package a
 
 If upstream has not published a release in a while, do not change the port's versioning scheme to `version-date` in order to get the latest changes. These commits may include changes that are not production ready. Instead ask the upstream repository to publish a new release.
 
-### Update the `"port-version"` field in the manifest file of any modified ports
+### <a name="update-the-port-version-field-in-the-manifest-file-of-any-modified-ports"></a> Update the `"port-version"` field for every modified port
 
-vcpkg uses this field to determine whether a given port is out-of-date and should be changed whenever the port's behavior changes.
+Each PR that modifies a port must produce a new version of that port. PRs are squash-merged, so update each modified
+port's version once per PR, not once per commit or review revision.
 
-Our convention is to use the `"port-version"` field for changes to the port that don't change the upstream version, and to reset the `"port-version"` back to zero when an update to the upstream version is made.
+If the upstream version hasn't changed, increment the `"port-version"` field. If the upstream version has changed, reset
+`"port-version"` to zero by removing the field or setting it to `0`.
 
 For Example:
 
@@ -582,7 +642,7 @@ For Example:
 
 See the [versioning documentation](../users/versioning.md#port-version) for more information.
 
-### Update the version files in `versions/` of any modified ports
+### <a name="update-the-version-files-in-versions-of-any-modified-ports"></a> Update the version files in `versions/` for every modified port
 
 vcpkg uses a set of metadata files to power its versioning feature.
 These files are located in the following locations:
@@ -595,7 +655,9 @@ For example, for `zlib` the relevant files are:
 - `${VCPKG_ROOT}/versions/baseline.json`
 - `${VCPKG_ROOT}/versions/z-/zlib.json`
 
-We expect that each time you update a port, you also update its version files.
+For each modified port in a PR, update its version files to record the final Git tree. If you make further changes during
+review, run `vcpkg x-add-version <port-name> --overwrite-version` to refresh the unmerged version entry
+without incrementing `"port-version"` again.
 
 **The recommended method to update these files is to run the `x-add-version` command, e.g.:**
 
@@ -623,18 +685,46 @@ vcpkg is a packaging solution, not the ultimate owners of the components that we
   * we are incapable of maintaining across upstream version updates
   * are large enough to cause license entanglement with the vcpkg repository itself
 
-### Notify upstream owners for upstream relevant patches
+### <a name="notify-upstream-owners-for-upstream-relevant-patches"></a> Upstream notification and waiting periods
 
-If a patch could possibly be useful by upstream, upstream must be notified of the patch's content. (Patches that apply vcpkg-specific behavior unrelated to upstream, such as devendoring a dependency, don't require notification.)
+Upstream owners are the final arbiters of their component's behavior. vcpkg maintainers require upstream notification
+for upstream-relevant patches and for bugs identified by AI code review tools in new port submissions.
 
-To avoid situations where upstream disagrees with the patch, we will wait at least 30 days to apply such patches.
+#### Upstream-relevant patches
 
-We will skip this waiting period if we have high confidence that the change is correct. Examples of high confidence patches include, but are not limited to:
+If a patch could possibly be useful by upstream, vcpkg maintainers require upstream to be notified of the patch's content.
+Patches that apply vcpkg-specific behavior unrelated to upstream, such as devendoring a dependency, don't require notification.
+
+To avoid situations where upstream disagrees with the patch, vcpkg maintainers wait at least 30 days after upstream
+notification before applying such patches.
+
+vcpkg maintainers skip this waiting period if they have high confidence that the change is correct. Examples of high
+confidence patches include, but are not limited to:
 
 * Upstream's acceptance as a patch (for example, backporting a specific change from a pull request upstream has merged).
 * Adding missing `#include`s.
 * Small and obvious product code fixes (for example, initializing an uninitialized variable).
 * Disabling irrelevant-in-vcpkg components of the build such as tests or examples.
+
+#### AI-identified bugs in new ports
+
+The curated registry aims to avoid shipping known exploitable code, but vcpkg maintainers can't comprehensively audit
+every component's source code. AI code review findings aren't, by themselves, a final determination that upstream code
+is vulnerable.
+
+When AI code review tools identify a bug during review of a new port submission, vcpkg maintainers require the bug to
+be reported to upstream, following the project's security reporting process for potentially exploitable bugs. This
+requirement applies even when the finding concerns upstream code that the port doesn't patch.
+
+- If upstream determines that the reported behavior isn't a bug, vcpkg maintainers accept that determination as final
+  and don't reject the new port submission on the basis of that finding.
+- If upstream fixes the bug, vcpkg maintainers accept the fixed version or an upstream-approved patch, subject to the
+  patching policy and the other requirements for new ports.
+- If upstream doesn't respond within 30 days after the bug is reported, vcpkg maintainers default to treating the AI
+  finding as an exploitable problem and close the new port submission.
+
+The high-confidence exceptions to the patch waiting period don't waive this bug-reporting requirement or the need
+for an upstream response.
 
 ### Prefer options over patching
 
@@ -648,23 +738,21 @@ Common options that allow you to avoid patching:
 
 ### <a name="prefer-download-patches"></a> Prefer downloading approved patches over checking them into the port
 
-If an approved or merged patch file can be obtained from upstream, ports should
-try to download them and apply them instead of having them as part of the port files.
-This process is prefered because it:
+If an approved or merged patch can be obtained from an upstream commit, download and apply it instead of checking it
+into the port. This process is preferred because it:
 
-- Confirms that upstream has accepted the patch changes
-- Simplifies the reviewing process by shifting the onus upstream
-- Reduces the vcpkg repository size for users that aren't using the patch
-- Avoids license conflicts with the vcpkg repository
+- Confirms that upstream has accepted the patch changes.
+- Simplifies the review process by shifting the onus upstream.
+- Reduces the vcpkg repository size for users that aren't using the patch.
+- Avoids license conflicts with the vcpkg repository.
 
-Patches should be downloaded from a stable endpoint to avoid SHA conflicts. 
-When downloading patch files from a pull request or commit from GitHub and
-GitLab the `?full_index=1` parameter should be appended to the download URL.
+Download patches only from URLs pinned to a full commit ID, not from pull request or merge request diff URLs whose
+contents can change. When downloading a commit patch from GitHub or GitLab, append `?full_index=1` to the URL. This
+parameter requests full object IDs in the diff; it doesn't make a mutable URL immutable.
 
-Examples:
-* `https://github.com/google/farmhash/pull/40.diff?full_index=1`
-* `https://github.com/linux-audit/audit-userspace/commit/f8e9bc5914d715cdacb2edc938ab339d5094d017.patch?full_index=1`
-* `https://gitlab.kitware.com/paraview/paraview/-/merge_requests/6375.diff?full_index=1`
+For example:
+
+<https://github.com/linux-audit/audit-userspace/commit/f8e9bc5914d715cdacb2edc938ab339d5094d017.patch?full_index=1>
 
 ### Prefer patching over overriding `VCPKG_<VARIABLE>` values
 
@@ -678,7 +766,7 @@ set(VCPKG_C_FLAGS "-O2 ${VCPKG_C_FLAGS}")
 set(VCPKG_CXX_FLAGS "-O2 ${VCPKG_CXX_FLAGS}")
 ```
 
-Using `vcpkg`'s built-in toolchains this works, because the value of `VCPKG_<LANG>_FLAGS` is forwarded to the appropriate `CMAKE_LANG_FLAGS` variable. But, a custom toolchain that is not aware of `vcpkg`'s variables will not forward them.
+Using `vcpkg`'s built-in toolchains this works, because the value of `VCPKG_<LANG>_FLAGS` is forwarded to the appropriate `CMAKE_<LANG>_FLAGS` variable. But, a custom toolchain that is not aware of `vcpkg`'s variables will not forward them.
 
 Because of this, it is preferable to patch the buildsystem directly when setting `CMAKE_<LANG>_FLAGS`.
 
