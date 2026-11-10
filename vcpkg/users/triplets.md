@@ -5,6 +5,7 @@ author: vicroms
 ms.author: viromer
 ms.date: 02/14/2024
 ms.topic: reference
+ai-usage: ai-assisted
 ---
 
 # Triplet variables
@@ -174,6 +175,46 @@ This field is optional.
 
 Also available as build-type specific `VCPKG_CMAKE_CONFIGURE_OPTIONS_DEBUG` and
 `VCPKG_CMAKE_CONFIGURE_OPTIONS_RELEASE` variables.
+
+### VCPKG_CMAKE_GENERATOR
+
+Sets the CMake generator that
+[`vcpkg_cmake_configure`](../maintainers/functions/vcpkg_cmake_configure.md)
+uses for ports that don't choose one (_since `vcpkg-cmake` version 2026-11-09_).
+
+This field is optional. When it's unset, vcpkg uses Ninja, or `Unix Makefiles`
+on non-Windows hosts where Ninja isn't available. A port's `GENERATOR` or
+`WINDOWS_USE_MSBUILD` parameter takes precedence over this variable.
+
+For example, to build ports with [FASTBuild](https://fastbuild.org/):
+
+```cmake
+set(VCPKG_CMAKE_GENERATOR FASTBuild)
+```
+
+vcpkg downloads the build tool for the `Ninja` and `FASTBuild` generators. For
+other generators, the build tool must be installed on the host.
+
+The generator alone builds without FASTBuild's cache. FASTBuild uses its cache
+only when it has a cache directory, the `FASTBUILD_CACHE_PATH` environment
+variable or
+[`CMAKE_FASTBUILD_CACHE_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_FASTBUILD_CACHE_PATH.html),
+and the cache is turned on with the `FASTBUILD_CACHE_MODE` environment variable
+(`r`, `w`, or `rw`). On Windows, where vcpkg builds ports in a clean
+environment, pass these variables through with
+[`VCPKG_ENV_PASSTHROUGH_UNTRACKED`](#vcpkg_env_passthrough_untracked).
+[`CMAKE_FASTBUILD_USE_DETERMINISTIC_PATHS`](https://cmake.org/cmake/help/latest/variable/CMAKE_FASTBUILD_USE_DETERMINISTIC_PATHS.html)
+gives the temporary files of preprocessed sources deterministic paths, which
+keeps the compiler's outputs deterministic:
+
+```cmake
+set(VCPKG_CMAKE_GENERATOR FASTBuild)
+set(VCPKG_ENV_PASSTHROUGH_UNTRACKED FASTBUILD_CACHE_PATH FASTBUILD_CACHE_MODE)
+list(APPEND VCPKG_CMAKE_CONFIGURE_OPTIONS -DCMAKE_FASTBUILD_USE_DETERMINISTIC_PATHS=ON)
+```
+
+For more information, see the
+[FASTBuild caching documentation](https://www.fastbuild.org/docs/features/caching.html).
 
 ### VCPKG_CONFIGURE_MAKE_OPTIONS
 
