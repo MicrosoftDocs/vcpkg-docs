@@ -175,6 +175,25 @@ This field is optional.
 Also available as build-type specific `VCPKG_CMAKE_CONFIGURE_OPTIONS_DEBUG` and
 `VCPKG_CMAKE_CONFIGURE_OPTIONS_RELEASE` variables.
 
+### VCPKG_CMAKE_GENERATOR
+
+Sets the CMake generator that
+[`vcpkg_cmake_configure`](../maintainers/functions/vcpkg_cmake_configure.md)
+uses for ports that don't choose one (_since `vcpkg-cmake` version 2026-11-09_).
+
+This field is optional. When it's unset, vcpkg uses Ninja, or `Unix Makefiles`
+on non-Windows hosts where Ninja isn't available. A port's `GENERATOR` or
+`WINDOWS_USE_MSBUILD` parameter takes precedence over this variable.
+
+For example, to build ports with [FASTBuild](https://fastbuild.org/):
+
+```cmake
+set(VCPKG_CMAKE_GENERATOR FASTBuild)
+```
+
+vcpkg downloads the build tool for the `Ninja` and `FASTBuild` generators. For
+other generators, the build tool must be installed on the host.
+
 ### VCPKG_CONFIGURE_MAKE_OPTIONS
 
 Set additional automake/autoconf configure options that are appended to the
