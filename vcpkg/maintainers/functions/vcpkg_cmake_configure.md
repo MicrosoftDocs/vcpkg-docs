@@ -2,6 +2,7 @@
 title: vcpkg_cmake_configure
 description: Use vcpkg_cmake_configure to configure a CMake-based project.
 ms.date: 01/10/2024
+ai-usage: ai-assisted
 ---
 # vcpkg_cmake_configure
 
@@ -70,9 +71,14 @@ This flag has no effect for MinGW targets.
 
 Specifies the CMake generator to use.
 
-By default vcpkg prefers to use Ninja as the CMake Generator for all platforms,
+By default vcpkg uses the generator that the triplet sets in
+[`VCPKG_CMAKE_GENERATOR`](../../users/triplets.md#vcpkg_cmake_generator) (_since version 2026-11-09_).
+If the triplet doesn't set one, vcpkg prefers to use Ninja as the CMake Generator for all platforms,
 or "Unix Makefiles" for non-Windows platforms when Ninja is not available.
-This parameter can be used for edge cases where project-specific buildsystems depend on a particular generator.
+This parameter can be used for edge cases where project-specific buildsystems depend on a particular generator,
+and takes precedence over `VCPKG_CMAKE_GENERATOR`. [`WINDOWS_USE_MSBUILD`](#windows_use_msbuild) takes precedence over both.
+
+vcpkg downloads the build tool for the `Ninja` and `FASTBuild` (_since version 2026-11-09_) generators.
 
 ### LOGFILE_BASE
 

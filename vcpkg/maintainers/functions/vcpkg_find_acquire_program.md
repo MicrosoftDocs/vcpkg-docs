@@ -28,6 +28,7 @@ The current list of programs includes:
 - CLANG
 - DARK
 - DOXYGEN
+- FASTBUILD
 - FLEX
 - GASPREPROCESSOR
 - GPERF
