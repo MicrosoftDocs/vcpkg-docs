@@ -205,7 +205,7 @@ At this time, the following helpers are deprecated:
 - The deprecated overload of `vcpkg_extract_source_archive()` without `ARCHIVE` should be replaced by the supported overload with `ARCHIVE`.
 - `vcpkg_apply_patches()` should be replaced by the `PATCHES` arguments to the "extract" helpers (e.g. [`vcpkg_from_github()`](../maintainers/functions/vcpkg_from_github.md))
 - `vcpkg_build_msbuild()` should be replaced by [`vcpkg_install_msbuild()`](../maintainers/functions/vcpkg_install_msbuild.md)
-- `vcpkg_copy_tool_dependencies()` should be replaced by [`vcpkg_copy_tools()`](../maintainers/functions/vcpkg_copy_tools.md)
+- Use [`vcpkg_copy_tools()`](../maintainers/functions/vcpkg_copy_tools.md) when you need to copy executables into the package's tools directory. It also copies their runtime DLL dependencies on Windows. If the build system installs the tools in the right place already, don't move them just to use this helper. Use [`vcpkg_copy_tool_dependencies()`](../maintainers/functions/vcpkg_copy_tool_dependencies.md) directly if you only need to copy runtime DLLs alongside those tools.
 - `vcpkg_configure_cmake` should be replaced by [`vcpkg_cmake_configure()`](../maintainers/functions/vcpkg_cmake_configure.md) after removing `PREFER_NINJA`
 - `vcpkg_build_cmake` should be replaced by [`vcpkg_cmake_build()`](../maintainers/functions/vcpkg_cmake_build.md)
 - `vcpkg_install_cmake` should be replaced by [`vcpkg_cmake_install()`](../maintainers/functions/vcpkg_cmake_install.md)
