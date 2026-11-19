@@ -18,7 +18,7 @@ vcpkg x-add-version [port-name] [options] [--all] [--overwrite-version] [--skip-
 
 ## Description
 
-The `x-add-version` command updates the [version database](../users/versioning.concepts.md#acquiring-port-versions) for vcpkg ports. By default, it operates on a specified port. With the appropriate switches, users can choose to process all ports or change the default behavior regarding formatting checks and version updates.
+The `x-add-version` command updates the [version database](../users/versioning.concepts.md#acquiring-port-versions) for vcpkg ports. By default, it operates on a specified port. With the appropriate switches, users can choose to process all ports or change the default behavior regarding formatting checks and version updates. When you use `--all`, vcpkg can skip loading a port's manifest if its current git-tree SHA is already present in the versions database. In that case, vcpkg doesn't run formatting or version-format checks for that port.
 
 To use the command:
 
@@ -53,11 +53,11 @@ Without this flag, vcpkg will refuse to overwrite existing versions.
 
 ### `--skip-formatting-check`
 
-Skips the check for proper formatting in the manifest file (`vcpkg.json`) of the port. By default, proper formatting is checked and required.
+Skips the check for proper formatting in the manifest file (`vcpkg.json`) of the port. By default, vcpkg checks formatting when it loads the manifest. With `--all`, vcpkg might skip loading a manifest when the port's current git-tree SHA is already present in the versions database, so it isn't guaranteed to check every port.
 
 ### `--skip-version-format-check`
 
-Skips the version format check. By default, versions are checked to ensure they adhere to a specific [format](../users/versioning.md#version-schemes).
+Skips the version format check. By default, vcpkg checks versions to ensure they adhere to a specific [format](../users/versioning.md#version-schemes) when it loads the manifest. With `--all`, vcpkg might skip loading a manifest when the port's current git-tree SHA is already present in the versions database, so it isn't guaranteed to check every port.
 
 ### `--verbose`
 
