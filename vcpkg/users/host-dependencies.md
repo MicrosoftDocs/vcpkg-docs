@@ -3,7 +3,7 @@ title: Host dependencies
 description: Describes host dependencies, tools packaged by vcpkg for use by ports or custom build systems.
 author: vicroms
 ms.author: viromer
-ms.date: 01/31/2025
+ms.date: 10/30/2026
 ms.topic: concept-article
 ---
 # Host dependencies
@@ -76,11 +76,47 @@ supports expression to describe this. This supports expression is true when
 `VCPKG_CROSSCOMPILING` is false (implying that `TARGET_TRIPLET ==
 HOST_TRIPLET`).
 
+## VCPKG_PREFER_HOST_TOOLS
+
+This CMake option adds executables built by vcpkg to
+[`CMAKE_PROGRAM_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_PROGRAM_PATH.html)
+and makes them available during your build process. Tools for the host
+triplet are searched first, then tools for the target triplet. This finds
+build tools that come with a target port and are not available as host tools,
+such as `wxrc` from `wxwidgets`.
+
+This option is on by default when `VCPKG_HOST_TRIPLET` is set. For it to take
+effect, it and `VCPKG_HOST_TRIPLET` must be set before any call to `project()`
+in your `CMakeLists.txt` file. [`VCPKG_USE_HOST_TOOLS`](#vcpkg_use_host_tools)
+takes precedence over it.
+
+Tools installed in the [`tools` folder](../reference/installation-tree-layout.md#layout-tools)
+are added to `CMAKE_PROGRAM_PATH` in this order:
+
+* `${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools`
+* `${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools/*` or `tools/*/bin`
+* `${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools`
+* `${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/tools/*` or `tools/*/bin`
+
+When the host and target triplets differ and
+[`CMAKE_FIND_ROOT_PATH_MODE_PROGRAM`](https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_ROOT_PATH_MODE_PROGRAM.html)
+is not already set, it is set to `NEVER`. Otherwise `find_program()` would
+search the target triplet's installed tree first and find the target copy of a
+tool that is installed for both triplets.
+
+> [!NOTE]
+> Tools found for the target triplet, such as `wxrc`, are built for the target
+> and may fail to run on the build machine when cross compiling.
+
 ## VCPKG_USE_HOST_TOOLS
 
-Set this CMake option to add executables built by vcpkg to
-[`CMAKE_PROGRAM_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_PROGRAM_PATH.html).
-and make them available during your build process.
+Set this CMake option to add only executables built by vcpkg for the host
+triplet to
+[`CMAKE_PROGRAM_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_PROGRAM_PATH.html)
+and make them available during your build process. Tools for the target
+triplet, such as `wxrc` from `wxwidgets`, are not found. This option is off by
+default; when on, it takes precedence over
+[`VCPKG_PREFER_HOST_TOOLS`](#vcpkg_prefer_host_tools).
 
 For this option to take effect it must be set before any call to `project()` in
 your `CMakeLists.txt` file. The `VCPKG_HOST_TRIPLET` variable must also be set.
@@ -90,4 +126,4 @@ for the host triplet are added to `CMAKE_PROGRAM_PATH`.
 Effectively, the following locations are added:
 
 * `${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools`
-* `${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools/*/bin`
+* `${VCPKG_INSTALLED_DIR}/${VCPKG_HOST_TRIPLET}/tools/*` or `tools/*/bin`
