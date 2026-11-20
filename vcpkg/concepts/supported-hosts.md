@@ -161,12 +161,12 @@ to point at the installed SDK.
 vcpkg requires a number of software packages that are not part of the operating system and have to be installed using the package manager:
 
 * FreeBSD: `pkg install -y bash cmake curl git ninja zip unzip`
-* OpenBSD: `pkg_add -Iz bash cmake coreutils curl git ninja zip unzip-6.10-iconv`
+* OpenBSD: `pkg_add -Ivz bash cmake coreutils curl git ninja zip unzip-6.0p18-iconv`
 
 As on Linux, it is recommended to also install some additional packages:
 
 * FreeBSD: `pkg install -y autoconf autoconf-archive gmake pkgconf python`
-* OpenBSD: `pkg_add -Iz autoconf-2.71 autoconf-archive gmake pkgconf python3`
+* OpenBSD: `pkg_add -Ivz autoconf-2.73 autoconf-archive gmake python`
 
 #### Caveats
 
