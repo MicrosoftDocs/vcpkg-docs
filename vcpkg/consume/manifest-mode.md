@@ -40,6 +40,66 @@ In this tutorial, you will learn how to:
 * A C++ compiler
 * (Optional) CMake or MSBuild
 
+## Migrating from classic mode to manifest mode
+
+This section describes how to transition an existing project that uses vcpkg in classic mode to manifest mode. Manifest mode is recommended for most users because it enables reproducible builds, dependency versioning, and project-scoped installations.
+
+### Key differences to understand before migrating
+
+Before migrating, it is important to understand how manifest mode differs from classic mode:
+
+- In classic mode, packages are installed globally under the vcpkg `installed` directory.
+- In manifest mode, dependencies are declared per project in a `vcpkg.json` file and installed into a project-specific `vcpkg_installed` directory.
+- Manifest mode requires a baseline commit to ensure consistent dependency versions across machines and over time.
+
+Migration does not require modifying your source code, but it does change how dependencies are declared and restored.
+
+### Step 1: Identify your project’s direct dependencies
+
+Review your existing project and identify the libraries that your project directly depends on. These are the libraries you explicitly use in your build configuration or source code.
+
+Only direct dependencies should be listed in the manifest file. Transitive dependencies are resolved automatically by vcpkg.
+
+### Step 2: Create a `vcpkg.json` manifest file
+
+Create a file named `vcpkg.json` in the root directory of your project.
+
+Add your direct dependencies under the `dependencies` field. At this stage, you may omit version constraints if you are not yet ready to lock versions.
+
+### Step 3: Choose a baseline commit
+
+Manifest mode requires a baseline commit from the vcpkg repository. The baseline defines the exact set of package versions used by your project and is required for reproducible builds.
+
+A recommended approach is to select:
+- The commit hash of the vcpkg repository currently used by your project, if known, or
+- A recent, stable commit from the official vcpkg repository history
+
+The selected commit hash should be added to the `builtin-baseline` field in `vcpkg.json`.
+
+This explicit baseline selection makes the migration predictable and avoids unexpected dependency changes.
+
+### Notes on `vcpkg x-update-baseline`
+
+Some workflows suggest using `vcpkg x-update-baseline --add-initial-baseline` to automatically generate a baseline. This command is currently marked as experimental.
+
+While it may be useful for exploration or prototyping, users who require stable and well-defined workflows may prefer to manually select and specify a baseline commit.
+
+### Step 4: Enable manifest mode in your build system
+
+After adding the manifest file and baseline, enable manifest mode in your build system (for example, MSBuild, CMake, or Visual Studio).
+
+Once enabled, vcpkg will install dependencies based on the manifest file rather than using globally installed packages from classic mode.
+
+At this point, the classic-mode installation is no longer required for the project.
+
+### Step 5: Verify the migration
+
+Build your project and confirm that:
+- Dependencies are restored into a project-specific `vcpkg_installed` directory
+- The build succeeds without relying on classic-mode installations
+
+After verification, the project can be considered fully migrated to manifest mode.
+
 ## Create a C++ project
 
 In a new folder, create a source file named `main.cxx` with these contents:
