@@ -3,8 +3,10 @@
     The first step is to clone the vcpkg repository from GitHub. The repository contains scripts to acquire the vcpkg executable and a registry of curated open-source libraries maintained by the vcpkg community. To do this, run:
 
     ```console
-    git clone https://github.com/microsoft/vcpkg.git
+    git clone https://github.com/microsoft/vcpkg.git --filter=tree:0
     ```
+
+    `--filter=tree:0` creates a *treeless* clone. Git downloads the complete commit history but fetches file contents on demand, so the initial download is much smaller. The clone works like a full clone while Git can reach the network, and unlike a shallow clone it keeps the history vcpkg's versioning feature needs. Requires Git 2.19 or later.
 
     The vcpkg curated registry is a set of over 2,000 open-source libraries. These libraries have been validated by vcpkg's continuous integration pipelines to work together. While the vcpkg repository does not contain the source code for these libraries, it holds recipes and metadata to build and install them in your system.
 

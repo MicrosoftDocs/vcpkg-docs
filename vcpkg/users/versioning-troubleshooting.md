@@ -171,6 +171,8 @@ note: while checking out port fmt with git tree 4f8427eb0bd40da1856d4e67bde39a4f
 
 This error indicates that the commit (`4f8427eb0bd40da1856d4e67bde39a4fda689d72`) required for the specific version of the package `fmt` is not available in the shallow clone.
 
+A treeless clone (`git clone <url> --filter=tree:0`) keeps the full commit history and fetches missing objects on demand, so vcpkg does not report it as a shallow repository.
+
 Resolutions:
 
 1. Convert to a full clone
