@@ -54,7 +54,7 @@ source shell mingw64   # for x64, or "mingw32" for x86
 The bootstrapping of vcpkg shall be done by running bootstrap-vcpkg.bat. This command will download the official vcpkg.exe.
 
 ```bash
-git clone https://github.com/microsoft/vcpkg.git
+git clone https://github.com/microsoft/vcpkg.git --filter=tree:0
 cd vcpkg
 ./bootstrap-vcpkg.bat
 ```
@@ -101,7 +101,7 @@ The packaged versions of Mingw-w64 toolchains on Linux distributions might be ol
 For vcpkg bootstrapping, clone the github repository and run the `bootstrap-vcpkg.sh` script:
 
 ```bash
-git clone https://github.com/microsoft/vcpkg.git
+git clone https://github.com/microsoft/vcpkg.git --filter=tree:0
 cd vcpkg
 ./bootstrap-vcpkg.sh
 ./vcpkg install zlib:x64-mingw-dynamic

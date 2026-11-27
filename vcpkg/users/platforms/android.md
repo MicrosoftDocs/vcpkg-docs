@@ -65,7 +65,7 @@ RUN \
 
 ENV ANDROID_NDK_HOME /android-ndk-r26d
 
-RUN git clone https://github.com/microsoft/vcpkg
+RUN git clone https://github.com/microsoft/vcpkg --filter=tree:0
 WORKDIR vcpkg
 RUN ./bootstrap-vcpkg.sh
 

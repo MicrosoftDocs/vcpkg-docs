@@ -23,6 +23,8 @@ bootstrap script to get a vcpkg executable.
 Regardless of the acquisition method you follow, it is highly recommended that
 your vcpkg instance has a complete Git history. The versioning feature of vcpkg
 relies on having a complete commit history to retrieve specific port versions.
+A shallow clone lacks that history. A treeless clone
+(`--filter=tree:0`) keeps it and fetches file contents on demand.
 
 ### Use vcpkg as a submodule
 
@@ -39,8 +41,10 @@ git submodule init
 A secondary method is to run a Git command as part of your CI scripts to clone
 an instance of the vcpkg repository.
 
+A treeless clone is the quickest way to obtain the complete commit history:
+
 ```bash
-git clone http://github.com/Microsoft/vcpkg
+git clone https://github.com/microsoft/vcpkg.git --filter=tree:0
 ./vcpkg/vcpkg-bootstrap.sh
 ```
 
